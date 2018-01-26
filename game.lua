@@ -40,6 +40,7 @@ end
 
 function game:update(dt)
     ship:update(dt)
+    ship.position = cpml.vec2.new(cpml.utils.clamp(ship.position.x, 0, constants.WIDTH), cpml.utils.clamp(ship.position.y, 0, constants.HEIGHT))
 
     for _, enemy in pairs(enemies) do
         enemy:update(dt)
