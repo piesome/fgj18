@@ -3,10 +3,10 @@ Camera = require "hump.camera"
 cpml = require "cpml"
 
 constants = require "constants"
-Asteroid = require "asteroid"
 Grid = require "grid"
 Ship = require "ship"
 Enemy = require "enemy"
+AsteroidField = require "asteroidField"
 
 local game = {}
 local ship = Ship()
@@ -14,7 +14,7 @@ local enemies = {}
 local camera = Camera(0, 0)
 
 local grid = Grid()
-local asteroid = Asteroid()
+local asteroids = AsteroidField()
 
 function game:enter()
     ship = Ship()
@@ -26,7 +26,7 @@ end
 
 function draw()
     grid:draw()
-    asteroid:draw()
+    asteroids:draw()
     ship:draw()
 
     for _, enemy in pairs(enemies) do

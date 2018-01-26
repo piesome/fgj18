@@ -6,7 +6,6 @@ game = require "game"
 local menu = {}
 
 function menu:enter()
-    love.graphics.setFont(fonts.menu)
 end
 
 function menu:draw()
