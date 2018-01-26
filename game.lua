@@ -7,6 +7,7 @@ Grid = require "grid"
 Ship = require "ship"
 Enemy = require "enemy"
 AsteroidField = require "asteroidField"
+TargetManager = require "targetManager"
 
 local game = {}
 local ship = Ship()
@@ -15,6 +16,7 @@ local camera = Camera(0, 0)
 
 local grid = Grid()
 local asteroids = AsteroidField()
+local targets = TargetManager()
 
 function game:enter()
     ship = Ship()
@@ -28,6 +30,7 @@ function draw()
     grid:draw()
     asteroids:draw()
     ship:draw()
+    targets:draw()
 
     for _, enemy in pairs(enemies) do
         enemy:draw()
@@ -41,6 +44,7 @@ end
 function game:update(dt)
     ship:update(dt)
     ship.position = cpml.vec2.new(cpml.utils.clamp(ship.position.x, 0, constants.WIDTH), cpml.utils.clamp(ship.position.y, 0, constants.HEIGHT))
+    targets:checkTargets(ship.position)
 
     for _, enemy in pairs(enemies) do
         enemy:update(dt)
