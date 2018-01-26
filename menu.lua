@@ -1,6 +1,7 @@
 gamestate = require "hump.gamestate"
 
 fonts = require "fonts"
+game = require "game"
 
 local menu = {}
 
@@ -15,6 +16,12 @@ end
 
 function menu:update()
 
+end
+
+function menu:keyreleased(key)
+    if key == "space" then
+        gamestate.switch(game)
+    end
 end
 
 return menu
