@@ -1,13 +1,16 @@
 gamestate = require "hump.gamestate"
+Grid = require "grid"
 
 local game = {}
+
+local grid = Grid()
 
 function game:enter()
 
 end
 
 function game:draw()
-
+    grid:draw()
 end
 
 function game:update()
