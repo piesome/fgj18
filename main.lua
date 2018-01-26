@@ -1,7 +1,7 @@
 gamestate = require "hump.gamestate"
-menu = require "menu"
+splashscreen = require "splashscreen"
 
 function love.load()
     gamestate.registerEvents()
-    gamestate.switch(menu)
+    gamestate.switch(splashscreen)
 end
