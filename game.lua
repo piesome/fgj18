@@ -14,6 +14,7 @@ local game = {}
 local ship = Ship()
 local enemies = {}
 local camera = Camera(0, 0)
+camera.smoother = Camera.smooth.none()
 
 local grid = Grid()
 local asteroids = AsteroidField()
@@ -21,7 +22,6 @@ local targets = TargetManager()
 local projectile = Projectile(cpml.vec2(0, 0), ship)
 
 function game:enter()
-    camera:lookAt(ship.position.x, ship.position.y)
     for i=1, 4 do
         table.insert(enemies, Enemy(cpml.vec2.new(love.math.random(constants.WIDTH), love.math.random(constants.HEIGHT))))
     end
@@ -40,6 +40,10 @@ function draw()
     projectile:draw()
 end
 
+function game:lookAtPlayer()
+    camera:lockPosition(ship.position.x, ship.position.y)
+end
+
 function game:draw()
     camera:draw(draw)
 end
@@ -54,7 +58,7 @@ function game:update(dt)
     for _, enemy in pairs(enemies) do
         enemy:update(dt)
     end
-    camera:lookAt(ship.position.x, ship.position.y)
+    self:lookAtPlayer()
 end
 
 function game:keyreleased(key)
