@@ -42,6 +42,10 @@ end
 
 function game:update(dt)
     ship:update(dt)
+
+    for _, enemy in pairs(enemies) do
+        enemy:update(dt)
+    end
     camera:lookAt(ship.position.x, ship.position.y)
 end
 
