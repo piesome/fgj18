@@ -10,7 +10,7 @@ end
 
 function menu:draw()
     love.graphics.setColor(255, 255, 255)
-    love.graphics.printf("fgj18", 100, 100, 100, "right")
+    love.graphics.print("fgj18", 100, 100)
 end
 
 function menu:update()
