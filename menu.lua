@@ -3,9 +3,17 @@ gamestate = require "hump.gamestate"
 fonts = require "fonts"
 game = require "game"
 
+local music = love.audio.newSource("assets/music/untitled.ogg", "stream")
+
 local menu = {}
 
 function menu:enter()
+    music:setLooping(true)
+    music:play()
+end
+
+function menu:leave()
+    music:stop()
 end
 
 function menu:draw()

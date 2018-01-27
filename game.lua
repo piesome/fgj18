@@ -17,10 +17,17 @@ local game = {}
 local camera = Camera(0, 0)
 camera.smoother = Camera.smooth.none()
 
+local music = love.audio.newSource("assets/music/untitled2.ogg", "stream")
 local level, enemies, grid, asteroids, targets, starmap, projectiles, particles
 
 function game:enter()
     self:loadLevel("level1")
+    music:setLooping(true)
+    music:play()
+end
+
+function game:leave()
+    music:stop()
 end
 
 function game:loadLevel(name)
