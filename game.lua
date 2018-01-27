@@ -26,6 +26,9 @@ local level, enemies, grid, asteroids, targets, starmap, projectiles, particles,
 heatRenderer = HeatRenderer()
 
 function game:enter()
+    self.playing = true
+    self.deathTimeout = 3
+    self.gameOverType = "lose"
     self:loadLevel("level1")
     music:setLooping(true)
     music:play()
@@ -103,8 +106,30 @@ function game:clampShip(dt)
     end
 end
 
+function game:over(type)
+    self.playing = false
+    self.gameOverType = type
+end
+
 function game:update(dt)
     particles:update(dt)
+
+    if not self.playing then
+        self.deathTimeout = self.deathTimeout - dt
+
+        if self.deathTimeout < 0 then
+            if type == "win" and level.nextLevel ~= nil then
+                self:loadLevel(level.nextLevel)
+
+                return
+            end
+
+            gamestate.switch(gameOver, self.gameOverType)
+        end
+
+        return
+    end
+
     ship:update(dt, particles)
     self:clampShip(dt)
     targets:update(dt)
@@ -121,16 +146,12 @@ function game:update(dt)
     self:lookAtPlayer()
 
     if targets.done then
-        if level.nextLevel == nil then
-            gamestate.switch(gameOver, "win")
-            return
-        end
-        self:loadLevel(level.nextLevel)
+        self:over("win")
+        return
     end
 
     if ship.frogs <= 0 then
-        gamestate.switch(gameOver, "lose")
-        return
+        self:over("lose")
     end
 end
 
