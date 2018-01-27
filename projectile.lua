@@ -2,17 +2,19 @@ Class = require "hump.class"
 cpml = require "cpml"
 vec2 = cpml.vec2
 
+local missileImage = love.graphics.newImage("assets/graphics/missile.png")
+
 Projectile = Class{
     init = function(self, position)
         self.position = position
         self.width = 5
         self.length = 15
         self.direction = vec2(1, 1)
-        self.color = {100, 100, 255, 255}
+        self.color = {255, 255, 255, 255}
 
         self.velocity = vec2(0, 0)
         self.acceleration = 200
-        self.friction = 0.1
+        self.friction = 0.3
         self.correctionFactor = 0.5
         self.turnSpeed = 3
     end,
@@ -21,9 +23,9 @@ Projectile = Class{
 
         love.graphics.setColor(self.color)       
         love.graphics.translate(self.position.x, self.position.y)
-        love.graphics.rotate(math.pi / 2 - math.atan2(self.direction.x, self.direction.y))
+        love.graphics.rotate(math.pi / 2 + math.atan2(self.direction.x, self.direction.y))
 
-        love.graphics.ellipse("line", 0, 0, self.length, self.width)
+        love.graphics.draw(missileImage, 0, 0, 0, 1, 1, missileImage:getWidth() / 2, missileImage:getHeight() / 2)
 
         love.graphics.pop()
     end,
