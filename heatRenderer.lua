@@ -14,7 +14,7 @@ function heatRenderer:init()
         vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords )
         {
             vec4 texcolor = Texel(shadows, screen_coords / screen_size);
-            float d = length(ship_pos - vpos);
+            float d = length(ship_pos - vpos.xy);
             float radiationP = clamp(0.0, 0.5, heat_radiation_output / pow(d - 30, 2) * 200);
 
             float c = radiationP;
