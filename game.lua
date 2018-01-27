@@ -58,6 +58,8 @@ function draw()
     for _, enemy in pairs(enemies) do
         enemy:draw()
     end
+
+    asteroids:drawShadowMap(ship.position)
 end
 
 function game:lookAtPlayer()
