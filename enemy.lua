@@ -11,6 +11,7 @@ Enemy = Class
     , angularVelocity = 0
     , sensorSensitivity = 0.0009 -- heat detection thereshold
     , thrust = 200
+    , emitter = ParticleEmitter(vec2(0,0), vec2(0,0), 5, {255, 127, 0, 127}, 0.3, vec2(150, 150), 120)
     }
 
 function Enemy:init(position)
@@ -29,7 +30,7 @@ function cpml.vec2.angle_between2(a, b)
     return math.atan2(cross, dot)
 end
 
-function Enemy:update(dt, ship)
+function Enemy:update(dt, ship, particles)
     toPlayerVec = ship.position - self.position
     playerHeatDetected = ship:radiationAtDistance(toPlayerVec:len())
     --print(playerHeatDetected)
@@ -49,6 +50,10 @@ function Enemy:update(dt, ship)
     self.rotation = self.rotation + self.angularVelocity * dt
     self.position = self.position + self.velocity * dt
     self.velocity = self.velocity - (self.velocity * dt * 0.8)
+
+    self.emitter.position = self.position - cpml.vec2.rotate(cpml.vec2(0, -1), self.rotation) * enemyImage:getWidth() / 2
+    self.emitter.velocity = cpml.vec2.rotate(cpml.vec2.normalize(velocityVector), self.rotation):normalize() * -200
+    self.emitter:update(dt, particles)
 end
 
 return Enemy
