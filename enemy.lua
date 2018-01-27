@@ -41,7 +41,7 @@ function Enemy:update(dt, ship, particles, projectiles)
     orientationVec = cpml.vec2(0,-1):rotate(self.rotation)
     if playerHeatDetected > self.sensorSensitivity then
         if self.currentCd <= 0 then
-            projectiles:spawnMissile(self.position, cpml.vec2(0, 1), cpml.vec2(0, -1)) 
+            projectiles:spawnMissile(self.position, self.velocity, vec2(1, 0):rotate(self.rotation)) 
             self.currentCd = self.cooldown
         end
 

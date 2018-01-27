@@ -25,8 +25,7 @@ AsteroidField = Class{
                 local result = RayCasting.test2DRayPolygons(position, direction, {asteroid.pointVectors})
                 if result then
                     table.insert(vertices, result[2])
-                    --table.insert(vertices, result[2] + direction)
-                    love.graphics.line(position.x, position.y, result[2].x, result[2].y)
+                    table.insert(vertices, result[2] + direction:normalize() * 1000)
                 end
             end
             local center = vec2()
@@ -43,7 +42,7 @@ AsteroidField = Class{
                 pair.pos = vertex
                 table.insert(verticesWithAngles, pair)
             end
-            --table.sort(verticesWithAngles, function(vertA, vertB) return vertA.angle > vertB.angle end)
+            table.sort(verticesWithAngles, function(vertA, vertB) return vertA.angle > vertB.angle end)
             local vertexData = {}
             for _, pair in ipairs(verticesWithAngles) do
                 table.insert(vertexData, pair.pos.x)
@@ -52,7 +51,8 @@ AsteroidField = Class{
             if #vertexData > 6 then
                 love.graphics.push()
                 love.graphics.translate(0, 0)
-                --love.graphics.polygon("line", vertexData)    
+                love.graphics.setColor(0,0,0)
+                love.graphics.polygon("fill", vertexData)    
                 love.graphics.pop()
             end
         end
