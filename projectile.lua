@@ -23,6 +23,7 @@ Projectile = Class{
         self.turnSpeed = 1.5
         self.dead = false
         self.timeToLive = 10
+        self.maxTurnAngle = 3.14
 
         self.emitter = ParticleEmitter(self.position, self.direction, 5, {255, 127, 0, 127}, 0.1, 1, 0.3, 60)
     end,
@@ -33,7 +34,7 @@ Projectile = Class{
 
         love.graphics.push()
 
-        love.graphics.setColor(self.color)       
+        love.graphics.setColor(self.color)
         love.graphics.translate(self.position.x, self.position.y)
         love.graphics.rotate(math.pi / 2 + math.atan2(self.direction.y, self.direction.x))
 
@@ -41,7 +42,7 @@ Projectile = Class{
 
         love.graphics.pop()
     end,
-    update = function(self, dt, target, particles)     
+    update = function(self, dt, target, particles)
         if self.dead then
             return
         end
@@ -57,20 +58,22 @@ Projectile = Class{
         local currentAngle = math.atan2(self.direction.y, self.direction.x)
 
         local rotationDirection = 0
-        if targetAngle < currentAngle then
-            if math.abs(targetAngle-currentAngle) < math.pi then
-                rotationDirection = -1
+        if math.abs(targetAngle-currentAngle) < self.maxTurnAngle then
+            if targetAngle < currentAngle then
+                if math.abs(targetAngle-currentAngle) < math.pi then
+                    rotationDirection = -1
+                else
+                    rotationDirection = 1
+                end
             else
-                rotationDirection = 1
+                if math.abs(targetAngle-currentAngle) < math.pi then
+                    rotationDirection = 1
+                else
+                    rotationDirection = -1
+                end
             end
-        else 
-            if math.abs(targetAngle-currentAngle) < math.pi then
-                rotationDirection = 1
-            else
-                rotationDirection = -1
-            end
-        end  
-        
+        end
+
         local nextAngle = currentAngle + dt * rotationDirection * self.turnSpeed
         self.direction = vec2(math.cos(nextAngle), math.sin(nextAngle))
         local velocityMult = (1 - self.friction * dt)
