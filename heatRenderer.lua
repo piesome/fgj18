@@ -15,7 +15,7 @@ function heatRenderer:init()
         {
             vec4 texcolor = Texel(shadows, screen_coords / screen_size);
             float d = length(ship_pos - vpos.xy) - 30;
-            float radiationP = clamp(heat_radiation_output / (d*d) * 200f, 0.0f, 0.5f);
+            float radiationP = max(min(heat_radiation_output / (d*d) * 200f, 0.5f), 0.0f);
 
             float c = radiationP;
             return texcolor * vec4(c,c,c,c) * vec4(1.0, 0.0, 0.0, 1.0);
