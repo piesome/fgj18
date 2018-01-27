@@ -3,9 +3,8 @@ cpml = require "cpml"
 vec2 = cpml.vec2
 
 Projectile = Class{
-    init = function(self, position, target)
+    init = function(self, position)
         self.position = position
-        self.target = target
         self.width = 5
         self.length = 15
         self.direction = vec2(1, 1)
@@ -28,8 +27,8 @@ Projectile = Class{
 
         love.graphics.pop()
     end,
-    update = function(self, dt)        
-        local targetDirection = ((self.target.position - self.position):normalize() - self.velocity:normalize() * 0.5):normalize()
+    update = function(self, dt, target)        
+        local targetDirection = ((target - self.position):normalize() - self.velocity:normalize() * 0.5):normalize()
         local targetAngle = math.atan2(targetDirection.y, targetDirection.x)
         local currentAngle = math.atan2(self.direction.y, self.direction.x)
 
