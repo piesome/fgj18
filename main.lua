@@ -1,6 +1,6 @@
 gamestate = require "hump.gamestate"
 splashscreen = require "splashscreen"
-game = require "game"
+menu = require "menu"
 
 function love.keypressed(key)
     if key == "f" then
@@ -27,5 +27,5 @@ function love.load()
     })
     
     gamestate.registerEvents()
-    gamestate.switch(game)
+    gamestate.switch(menu)
 end
