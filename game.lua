@@ -11,6 +11,7 @@ TargetManager = require "targetManager"
 ProjectileManager = require "projectileManager"
 Starmap = require "starmap"
 ParticleManager = require "particleManager"
+HeatRenderer = require "heatRenderer"
 
 local game = {}
 
@@ -18,7 +19,10 @@ local camera = Camera(0, 0)
 camera.smoother = Camera.smooth.none()
 
 local music = love.audio.newSource("assets/music/untitled2.ogg", "stream")
-local level, enemies, grid, asteroids, targets, starmap, projectiles, particles
+local level, enemies, grid, asteroids, targets, starmap, projectiles, particles, heatRenderer
+
+-- HeatRenderer.init allocates resources
+heatRenderer = HeatRenderer()
 
 function game:enter()
     self:loadLevel("level1")
@@ -59,7 +63,7 @@ function draw()
         enemy:draw()
     end
 
-    asteroids:drawShadowMap(ship.position)
+    heatRenderer:draw(asteroids, ship)
 end
 
 function game:lookAtPlayer()

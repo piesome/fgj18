@@ -52,19 +52,7 @@ function Ship:init(position)
     return self
 end
 
-function Ship:heatCircle(heatPercentage, radius)
-    brightness = math.max(0.0, math.min(1.0, heatPercentage))*255
-    love.graphics.setColor(HSL(0, 255, brightness, brightness))
-    love.graphics.circle("fill", self.position.x, self.position.y, radius)
-end
-
 function Ship:draw()
-    for x=1,50 do
-        r = self.shipRadius + 10 + x*x/5.5
-        visualHeat = self:radiationAtDistance(r*2) * 200
-        self:heatCircle(visualHeat, r)
-    end
-
     love.graphics.setColor(255, 255, 255)
     love.graphics.draw(shipImage, self.position.x, self.position.y, self.rotation, 1, 1, shipImage:getWidth() / 2, shipImage:getHeight() / 2)
 end
