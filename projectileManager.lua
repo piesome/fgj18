@@ -21,7 +21,9 @@ ProjectileManager = Class{
         local aliveProjectiles = {}
 
         for index, projectile in ipairs(self.projectiles) do
-            projectile:update(dt, target.position, particles)
+            if projectile:update(dt, target.position, particles) then
+                for i=1,5 do target:loseFrog(particles) end
+            end
             if projectile.dead then
             else
                 table.insert(aliveProjectiles, projectile)

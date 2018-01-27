@@ -83,7 +83,9 @@ Projectile = Class{
 
         if (target - self.position):len() <= self.explosionRadius then
             self:die(particles)
+            return true
         end
+        return false
     end,
     die = function(self, particles)
         self.dead = true
