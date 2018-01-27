@@ -45,10 +45,10 @@ function menu:draw()
         local rot = (-math.pi / 16) * (i - 1) + self.rotation
         local origin = cpml.vec2.new(love.graphics.getWidth() + 200,  love.graphics.getHeight() / 2)
         local pos = origin + cpml.vec2.new(-390, -16):rotate(rot)
-        love.graphics.printf(self.options[i][1], pos.x, pos.y, 200, "left", rot)
+        love.graphics.printf(self.options[i][1]:upper(), pos.x, pos.y, 200, "left", rot)
 
-        local rot1 = rot + (math.pi / 32) - (math.pi / 64)
-        local rot2 = rot + (-math.pi / 32) - (math.pi / 64)
+        local rot1 = rot + (math.pi / 32)
+        local rot2 = rot + (-math.pi / 32)
         local rot1pos = origin + cpml.vec2.new(-400, 0):rotate(rot1)
         local rot2pos = origin + cpml.vec2.new(-400, 0):rotate(rot2)
         love.graphics.setColor(200, 200, 200)
