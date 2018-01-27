@@ -6,6 +6,7 @@ ParticleEmitter = require "particleEmitter"
 ParticleEffects = require "particleEffects"
 
 local missileImage = love.graphics.newImage("assets/graphics/missile.png")
+local explosionSound = love.audio.newSource("assets/sfx/explosion.wav", "static")
 
 Projectile = Class{
     init = function(self, position, velocity, direction)
@@ -48,7 +49,7 @@ Projectile = Class{
         end
 
         if self.timeToLive <= 0 then
-            self:die(particles)
+            self:die(particles, target)
         end
 
         self.timeToLive = self.timeToLive - dt
@@ -79,20 +80,23 @@ Projectile = Class{
         local velocityMult = (1 - self.friction * dt)
         self.velocity = self.velocity * (1 - self.friction * dt) + self.direction * dt * self.acceleration
         self.position = self.position + self.velocity * dt
-        
+
         self.emitter.position = self.position - self.direction * self.length
         self.emitter.velocity = self.direction * -1 * self.acceleration + self.velocity
         self.emitter:update(dt, particles)
 
         if (target - self.position):len() <= self.explosionRadius then
-            self:die(particles)
+            self:die(particles, target)
             return true
         end
         return false
     end,
-    die = function(self, particles)
+    die = function(self, particles, target)
         self.dead = true
+        explosionSound:setRelative(true)
+        explosionSound:setPosition((self.position.x - target.x) / 10, (self.position.y - target.y) / 10, 0)
         ParticleEffects:explosion(particles, self.position, self.velocity)
+        love.audio.play(explosionSound)
     end,
 }
 
