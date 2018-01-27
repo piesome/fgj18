@@ -29,6 +29,9 @@ function menu:keyreleased(key)
     if key == "space" then
         gamestate.switch(game)
     end
+    if key == "escape" then
+        love.event.push("quit")
+    end
 end
 
 return menu
