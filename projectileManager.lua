@@ -13,13 +13,13 @@ ProjectileManager = Class{
             projectile:draw()
         end
     end,
-    update = function(self, dt, target)
+    update = function(self, dt, target, particles)
         if love.keyboard.isDown("0") then
             table.insert(self.projectiles, Projectile(vec2(0, 0)))
         end
 
         for index, projectile in ipairs(self.projectiles) do
-            projectile:update(dt, target.position)
+            projectile:update(dt, target.position, particles)
         end
     end,
 }
