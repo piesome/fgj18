@@ -28,6 +28,11 @@ function splash()
     gamestate.push(splashScreen)
 end
 
+function help()
+    helpScreen = require "help"
+    gamestate.push(helpScreen)
+end
+
 function fullscreen()
     if love.window.getFullscreen() then
         love.window.setMode(720, 480, {
@@ -84,7 +89,7 @@ function menu:enter()
         {audioLabel, audio},
         {videoLabel, fullscreen},
         {"play", play},
-        {"help", exit},
+        {"help", help},
         {"credits", splash},
         {"exit", exit}
     }
