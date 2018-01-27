@@ -6,7 +6,7 @@ Projectile = require "projectile"
 
 ProjectileManager = Class{
     init = function(self, width, height)
-        self.projectiles = {Projectile(vec2(200, 200))}
+        self.projectiles = {}
     end,
     draw = function(self)
         for index, projectile in ipairs(self.projectiles) do
@@ -14,6 +14,10 @@ ProjectileManager = Class{
         end
     end,
     update = function(self, dt, target)
+        if love.keyboard.isDown("0") then
+            table.insert(self.projectiles, Projectile(vec2(0, 0)))
+        end
+
         for index, projectile in ipairs(self.projectiles) do
             projectile:update(dt, target.position)
         end
