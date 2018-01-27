@@ -8,7 +8,7 @@ Grid = Class{
         self.height = height
     end,
     draw = function(self)
-        love.graphics.setColor(self.color)       
+        love.graphics.setColor(self.color)
 
         for i = 0, self.height, self.spacing do
             love.graphics.line(i, 0, i, self.height)

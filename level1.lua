@@ -1,8 +1,8 @@
 return {
     name = "Level 1",
     nextLevel = nil,
-    width = 3050,
-    height = 3050,
+    width = 3000,
+    height = 3000,
     ship = {800, 800},
     asteroids = {
         {800, 750, 40},
