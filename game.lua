@@ -16,7 +16,7 @@ local game = {}
 local camera = Camera(0, 0)
 camera.smoother = Camera.smooth.none()
 
-local level, enemies, grid, asteroids, targets, starmap
+local level, enemies, grid, asteroids, targets, starmap, projectile
 
 function game:enter()
     self:loadLevel("level1")
@@ -30,6 +30,7 @@ function game:loadLevel(name)
     ship = Ship(cpml.vec2.new(level.ship))
     asteroids = AsteroidField(level.asteroids)
     targets = TargetManager(level.targets)
+    projectile = Projectile(cpml.vec2(200, 300), ship)
 
     enemies = {}
     for _, data in pairs(level.enemies) do
@@ -42,6 +43,7 @@ function draw()
     asteroids:draw()
     ship:draw()
     targets:draw()
+    projectile:draw()
 
     for _, enemy in pairs(enemies) do
         enemy:draw()
@@ -62,6 +64,7 @@ function game:update(dt)
     ship.position = cpml.vec2.new(cpml.utils.clamp(ship.position.x, 0, level.width), cpml.utils.clamp(ship.position.y, 0, level.height))
     targets:update(dt)
     targets:checkTargets(ship.position)
+    projectile:update(dt)
 
     for _, enemy in pairs(enemies) do
         enemy:update(dt)
