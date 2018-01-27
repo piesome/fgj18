@@ -9,13 +9,14 @@ Enemy = require "enemy"
 AsteroidField = require "asteroidField"
 TargetManager = require "targetManager"
 Projectile = require "projectile"
+Starmap = require "starmap"
 
 local game = {}
 
 local camera = Camera(0, 0)
 camera.smoother = Camera.smooth.none()
 
-local level, enemies, grid, asteroids, targets
+local level, enemies, grid, asteroids, targets, starmap
 
 function game:enter()
     self:loadLevel("level1")
@@ -25,6 +26,7 @@ function game:loadLevel(name)
     level = require(name)
 
     grid = Grid(level.width, level.height)
+    starmap = Starmap(level.width, level.height)
     ship = Ship(cpml.vec2.new(level.ship))
     asteroids = AsteroidField(level.asteroids)
     targets = TargetManager(level.targets)
@@ -51,6 +53,7 @@ function game:lookAtPlayer()
 end
 
 function game:draw()
+    starmap:draw(ship.position)
     camera:draw(draw)
 end
 
