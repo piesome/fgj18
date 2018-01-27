@@ -11,13 +11,21 @@ end
 
 function test2DRayPolygons(origin, dir, polygons)
     local segA = origin
+    local segB = origin + dir * 10000 -- max tracing distance
+    return test2DSegmentPolygons(segA, segB, polygons)
+end
+
+function test2DSegmentPolygons(segA, segB, polygons)
     local minResult = {10000, nil} -- max tracing distance
-    local segB = origin + dir * minResult[1]
 
     for j, poly in next, polygons do
         for i=2,#poly do
             segC = poly[i-1]
             segD = poly[i]
+
+            v = (segD - segC):normalize() * 0.002
+            segC = segC - v
+            segD = segD + v
 
             result = test2DSegmentSegment(segA,segB,segC,segD)
             if result ~= nil then
