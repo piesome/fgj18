@@ -1,7 +1,7 @@
 Class = require "hump.class"
 cpml = require "cpml"
 
-local targetImage = love.graphics.newImage("assets/graphics/drugfrog.png")
+local targetImage = love.graphics.newImage("assets/graphics/station.png")
 
 Target = Class{}
 
@@ -10,17 +10,26 @@ function Target:init(number, position)
     self.position = position
     self.rotation = 0
     self.frogRequirement = 20
+    self.frame = 0
+    self.frameCounter = 0.5
 end
 
 function Target:update(dt)
-    self.rotation = self.rotation + dt
+    self.rotation = self.rotation + (dt * 0.25)
+    self.frameCounter = self.frameCounter - dt
+    if self.frameCounter < 0 then
+        self.frame = self.frame + 1
+        self.frameCounter = 0.5
+        if self.frame > 2 then
+            self.frame = 0
+        end
+    end
 end
 
 function Target:draw()
     love.graphics.setColor(255, 255, 255)
-    love.graphics.draw(targetImage, self.position.x, self.position.y, 0, 1, 1, targetImage:getWidth() / 2, targetImage:getHeight() / 2)
-    textpos = self.position + cpml.vec2.rotate(cpml.vec2.new(0, 40), self.rotation)
-    love.graphics.print(tostring(self.number), textpos.x, textpos.y, self.rotation - (math.pi), 1, 1, 16, 16)
+    quad = love.graphics.newQuad(self.frame * (targetImage:getWidth() / 3), 0, (targetImage:getWidth() / 3), targetImage:getHeight(), targetImage:getWidth(), targetImage:getHeight())
+    love.graphics.draw(targetImage, quad, self.position.x, self.position.y, self.rotation, 1, 1, targetImage:getWidth() / 6, targetImage:getHeight() / 2)
 end
 
 return Target
