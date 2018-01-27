@@ -40,9 +40,9 @@ end
 
 function draw()
     grid:draw()
-    asteroids:draw()
     ship:draw()
     targets:draw()
+    asteroids:draw()
     projectiles:draw()
 
     for _, enemy in pairs(enemies) do
