@@ -118,6 +118,13 @@ function Ship:update(dt, particles)
         move(-self.accelSpeed * dt)
     end
 
+    if self.rotationSpeed > 0.1 then
+        self.rotationSpeed = 0.075
+    elseif self.rotationSpeed < -0.1 then
+        self.rotationSpeed = -0.075
+    else
+        self.rotationSpeed = self.rotationSpeed / 1.01
+    end
     self.rotation = self.rotation + self.rotationSpeed
 
     self.velocity = self.velocity + cpml.vec2.rotate(cpml.vec2.normalize(velocityVector), self.rotation)
