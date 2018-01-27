@@ -1,6 +1,7 @@
 gamestate = require "hump.gamestate"
 cpml = require "cpml"
 
+require "util"
 fonts = require "fonts"
 game = require "game"
 ParticleManager = require "particleManager"
@@ -109,11 +110,23 @@ end
 
 local rgb = love.graphics.setColor
 
+
+local bgscale = gradient {
+    direction = "horizontal";
+    {165,214,167};
+    {102,187,106};
+}
+
 function menu:draw()
-    rgb(1,87,155)
+    rgb(165,214,167)
+    love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+
+    drawinrect(bgscale, 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+
+    rgb(56,142,60)
     love.graphics.circle("fill", love.graphics.getWidth() + 300, love.graphics.getHeight() / 2, 600)
 
-    rgb(2,119,189)
+    rgb(67,160,71)
     love.graphics.circle("line", love.graphics.getWidth() + 300, love.graphics.getHeight() / 2, 600)
 
     local origin = cpml.vec2.new(love.graphics.getWidth() + 300,  love.graphics.getHeight() / 2)
@@ -132,7 +145,7 @@ function menu:draw()
         local rot1pos = origin + cpml.vec2.new(-lennn, 0):rotate(rot1)
         local rot2pos = origin + cpml.vec2.new(-lennn, 0):rotate(rot2)
 
-        rgb(2,119,189)
+        rgb(67,160,71)
         love.graphics.line(origin.x, origin.y, rot1pos.x, rot1pos.y)
         love.graphics.line(origin.x, origin.y, rot2pos.x, rot2pos.y)
 
