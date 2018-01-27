@@ -67,6 +67,7 @@ end
 function game:draw()
     starmap:draw(ship.position)
     camera:draw(draw)
+    targets:drawHud(ship.position)
 end
 
 function game:update(dt)
