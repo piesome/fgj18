@@ -28,6 +28,43 @@ function splash()
     gamestate.push(splashScreen)
 end
 
+function fullscreen()
+    if love.window.getFullscreen() then
+        love.window.setMode(720, 480, {
+            resizable = true,
+            centered = true,
+            minwidth = 720,
+            minheight = 480
+        })
+    else
+        love.window.setFullscreen(true)
+    end
+end
+
+function audio()
+    if love.audio.getVolume() == 0 then
+        love.audio.setVolume(1)
+    else
+        love.audio.setVolume(0)
+    end
+end
+
+function videoLabel()
+    if love.window.getFullscreen() then
+        return "windowed"
+    else
+        return "fullscreen"
+    end
+end
+
+function audioLabel()
+    if love.audio.getVolume() == 1 then
+        return "mute audio"
+    else
+        return "play audio"
+    end
+end
+
 function menu:enter()
     self.frogEmitter = ParticleEmitter(vec2(0,0), vec2(0,0), 0.25, {255, 255, 255, 255}, 2, 1, 1, 100)
     self.frogEmitter.image = deadFrog
@@ -42,10 +79,18 @@ function menu:enter()
         self.raining = not self.raining
     end
 
-    self.options = {{"play", play}, {"help", exit}, {"credits", splash}, {"suprise", suprise}, {"exit", exit}}
-    self.selected = 1
-    self.rotation = 0
-    self.targetRotation = 0
+    self.options = {
+        {"suprise", suprise},
+        {audioLabel, audio},
+        {videoLabel, fullscreen},
+        {"play", play},
+        {"help", exit},
+        {"credits", splash},
+        {"exit", exit}
+    }
+    self.selected = 4
+    self.rotation = (-math.pi / 16) * -3
+    self.targetRotation = (-math.pi / 16) * -3
 
     music:setLooping(true)
     music:play()
@@ -57,7 +102,7 @@ end
 
 function menu:draw()
     love.graphics.setColor(255, 255, 255)
-    love.graphics.circle("line", love.graphics.getWidth() + 200, love.graphics.getHeight() / 2, 400)
+    love.graphics.circle("line", love.graphics.getWidth() + 300, love.graphics.getHeight() / 2, 600)
 
     for i = 1,#self.options do
         if i == self.selected then
@@ -66,14 +111,18 @@ function menu:draw()
             love.graphics.setColor(100, 100, 100)
         end
         local rot = (-math.pi / 16) * (i - 1) + self.rotation
-        local origin = cpml.vec2.new(love.graphics.getWidth() + 200,  love.graphics.getHeight() / 2)
-        local pos = origin + cpml.vec2.new(-390, -16):rotate(rot)
-        love.graphics.printf(self.options[i][1]:upper(), pos.x, pos.y, 200, "left", rot)
+        local origin = cpml.vec2.new(love.graphics.getWidth() + 300,  love.graphics.getHeight() / 2)
+        local pos = origin + cpml.vec2.new(-590, -16):rotate(rot)
+        local text = self.options[i][1]
+        if type(text) ~= "string" then
+            text = text()
+        end
+        love.graphics.printf(text:upper(), pos.x, pos.y, 300, "left", rot)
 
         local rot1 = rot + (math.pi / 32)
         local rot2 = rot + (-math.pi / 32)
-        local rot1pos = origin + cpml.vec2.new(-400, 0):rotate(rot1)
-        local rot2pos = origin + cpml.vec2.new(-400, 0):rotate(rot2)
+        local rot1pos = origin + cpml.vec2.new(-600, 0):rotate(rot1)
+        local rot2pos = origin + cpml.vec2.new(-600, 0):rotate(rot2)
         love.graphics.setColor(200, 200, 200)
         love.graphics.line(origin.x, origin.y, rot1pos.x, rot1pos.y)
         love.graphics.line(origin.x, origin.y, rot2pos.x, rot2pos.y)
@@ -107,17 +156,18 @@ function menu:update(dt)
     end
 end
 
+function menu:scroll(i)
+    self.selected = math.min(#self.options, self.selected - i)
+    self.targetRotation = self.targetRotation + (-math.pi / 16) * i
+    love.audio.play(menuScrollSound)
+end
+
 function menu:keypressed(key)
-    function scroll(i)
-        self.selected = math.min(#self.options, self.selected - i)
-        self.targetRotation = self.targetRotation + (-math.pi / 16) * i
-        love.audio.play(menuScrollSound)
-    end
     if key == "up" and self.selected > 1 then
-        scroll(1)
+        self:scroll(1)
     end
     if key == "down" and self.selected < #self.options then
-        scroll(-1)
+        self:scroll(-1)
     end
 end
 function menu:keyreleased(key)

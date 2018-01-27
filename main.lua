@@ -15,6 +15,13 @@ function love.keypressed(key)
             love.window.setFullscreen(true)
         end
     end
+    if key == "m" then
+        if love.audio.getVolume() == 0 then
+            love.audio.setVolume(1)
+        else
+            love.audio.setVolume(0)
+        end
+    end
 end
 
 function love.load()
