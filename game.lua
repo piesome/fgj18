@@ -12,6 +12,7 @@ ProjectileManager = require "projectileManager"
 Starmap = require "starmap"
 ParticleManager = require "particleManager"
 HeatRenderer = require "heatRenderer"
+gameOver = require "gameOver"
 
 local game = {}
 
@@ -121,11 +122,15 @@ function game:update(dt)
 
     if targets.done then
         if level.nextLevel == nil then
-            menu = require "menu"
-            gamestate.switch(menu)
+            gamestate.switch(gameOver, "win")
             return
         end
         self:loadLevel(level.nextLevel)
+    end
+
+    if ship.frogs <= 0 then
+        gamestate.switch(gameOver, "lose")
+        return
     end
 end
 
