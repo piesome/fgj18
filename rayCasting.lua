@@ -1,4 +1,5 @@
-
+cpml = require "cpml"
+vec2 = cpml.vec2
 -- input vec2
 -- returns positive if c is on the left side of line a b, else negative
 -- denominator = normal * (B - A)
@@ -10,29 +11,20 @@ end
 
 
 function test2DRayPolygons(origin, dir, polygons)
-    local segA = origin
-    local segB = origin + dir * 10000 -- max tracing distance
-    return test2DSegmentPolygons(segA, segB, polygons)
-end
-
-function test2DSegmentPolygons(segA, segB, polygons)
-    local minResult = {10000, nil} -- max tracing distance
+    local minResult = {100000, nil} -- max tracing distance
 
     for j, poly in next, polygons do
-        for i=2,#poly do
-            segC = poly[i-1]
+        segC = poly[#poly]
+        for i=1,#poly do
             segD = poly[i]
 
-            v = (segD - segC):normalize() * 0.002
-            segC = segC - v
-            segD = segD + v
-
-            result = test2DSegmentSegment(segA,segB,segC,segD)
+            result = test2DRaySegment(origin, dir, segC, segD)
             if result ~= nil then
                 if result[1] < minResult[1] then
                     minResult = result
                 end
             end
+            segC = segD
         end
     end
     if minResult[2] ~= nil then
@@ -41,6 +33,40 @@ function test2DSegmentPolygons(segA, segB, polygons)
         return nil
     end
 end
+
+--function test2DRayPolygons(origin, dir, polygons)
+--    local segA = origin
+--    local segB = origin + dir * 10000 -- max tracing distance
+--    return test2DSegmentPolygons(segA, segB, polygons)
+--end
+--
+--function test2DSegmentPolygons(segA, segB, polygons)
+--    local minResult = {10000, nil} -- max tracing distance
+--
+--    for j, poly in next, polygons do
+--        segC = poly[#poly]
+--        for i=1,#poly do
+--            segD = poly[i]
+--
+--            v = (segD - segC):normalize() * 0.002
+--            segC = segC - v
+--            segD = segD + v
+--
+--            result = test2DSegmentSegment(segA,segB,segC,segD)
+--            if result ~= nil then
+--                if result[1] < minResult[1] then
+--                    minResult = result
+--                end
+--            end
+--            segC = segD
+--        end
+--    end
+--    if minResult[2] ~= nil then
+--        return minResult
+--    else
+--        return nil
+--    end
+--end
 
 
 -- Test if segments ab and cd overlap. If they do, compute and return
@@ -72,6 +98,24 @@ function test2DSegmentSegment(a,b,c,d)
     end
     -- Segments not intersecting (or collinear)
     return nil
+end
+
+function test2DRaySegment(origin, dir, a, b)
+    local v1 = origin - a
+    local v2 = b - a
+    local v3 = dir:perpendicular()
+    local x = v2:dot(v3)
+    local t2 = v1:dot(v3) / x
+    if t2 < 1.001 and t2 > -0.001 then
+        local t1 = -v1:cross(v2) / x
+        if t1 > -0.001 then
+            return {t1, origin + dir*t1}
+        else
+            return nil
+        end
+    else 
+        return nil
+    end
 end
 
 return 
