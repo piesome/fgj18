@@ -23,6 +23,12 @@ function TargetManager:draw()
     end
 end
 
+function TargetManager:update(dt)
+    for _, target in pairs(self.targets) do
+        target:update(dt)
+    end
+end
+
 function TargetManager:checkTargets(playerPosition)
     for i=#self.targets, 1, -1 do
         target = self.targets[i]
