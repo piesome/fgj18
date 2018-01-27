@@ -50,9 +50,11 @@ AsteroidField = Class{
             end
             if #vertexData > 6 then
                 love.graphics.push()
+                love.graphics.setBlendMode("replace")
                 love.graphics.translate(0, 0)
-                love.graphics.setColor(0,0,0)
-                love.graphics.polygon("fill", vertexData)    
+                love.graphics.setColor(0,0,0,0)
+                love.graphics.polygon("fill", vertexData)
+                love.graphics.setBlendMode("alpha")
                 love.graphics.pop()
             end
         end

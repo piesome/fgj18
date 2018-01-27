@@ -51,8 +51,13 @@ function game:loadLevel(name)
     end
 end
 
+function preDraw()
+    heatRenderer:preDraw(asteroids, ship)
+end
+
 function draw()
     grid:draw()
+    heatRenderer:draw(ship)
     ship:draw()
     targets:draw()
     asteroids:draw()
@@ -62,8 +67,6 @@ function draw()
     for _, enemy in pairs(enemies) do
         enemy:draw()
     end
-
-    heatRenderer:draw(asteroids, ship)
 end
 
 function game:lookAtPlayer()
@@ -71,6 +74,8 @@ function game:lookAtPlayer()
 end
 
 function game:draw()
+    camera:draw(preDraw)
+
     starmap:draw(ship.position)
     camera:draw(draw)
     targets:drawHud(ship.position)
