@@ -23,7 +23,7 @@ Projectile = Class{
         self.turnSpeed = 1.5
         self.dead = false
 
-        self.emitter = ParticleEmitter(self.position, self.direction, 5, {255, 127, 0, 127}, 0.1, vec2(50, 50), 60)
+        self.emitter = ParticleEmitter(self.position, self.direction, 5, {255, 127, 0, 127}, 0.1, 1, 0.3, 60)
     end,
     draw = function(self)
         if self.dead then

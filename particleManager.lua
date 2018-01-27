@@ -23,14 +23,7 @@ ParticleManager = Class{
         end
         self.particles = aliveParticles
     end,
-    add = function(self, position, velocity, size, color, maxAge)
-        local particle = {}
-        particle.position = position
-        particle.velocity = velocity
-        particle.size = size
-        particle.color = color
-        particle.age = 0
-        particle.maxAge = maxAge
+    add = function(self, particle)
         table.insert(self.particles, particle)
     end,
 }

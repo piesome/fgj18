@@ -11,7 +11,7 @@ Enemy = Class
     , angularVelocity = 0
     , sensorSensitivity = 0.0009 -- heat detection thereshold
     , thrust = 200
-    , emitter = ParticleEmitter(vec2(0,0), vec2(0,0), 5, {255, 127, 0, 127}, 0.3, vec2(150, 150), 120)
+    , emitter = ParticleEmitter(vec2(0,0), vec2(0,0), 5, {255, 127, 0, 127}, 0.3, 1, 0.3, 120)
     }
 
 function Enemy:init(position)
