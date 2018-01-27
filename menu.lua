@@ -31,9 +31,10 @@ function menu:draw()
     for i = 1,#self.options do
         if i == self.selected then
             love.graphics.setColor(200, 200, 200)
+        else
+            love.graphics.setColor(100, 100, 100)
         end
         love.graphics.print(self.options[i][1], 100, 200 + (i * 96))
-        love.graphics.setColor(100, 100, 100)
     end
 
     love.graphics.setColor(255, 255, 255)
