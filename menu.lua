@@ -77,6 +77,8 @@ function menu:enter()
     self.frogEmitter.smaller = true
     self.particles = ParticleManager()
     self.raining = false
+    self.extra = 0
+    self.extraTarget = 0
     local particles = self.particles
     local frogEmitter = self.frogEmitter
 
@@ -105,38 +107,51 @@ function menu:leave()
     music:stop()
 end
 
+local rgb = love.graphics.setColor
+
 function menu:draw()
-    love.graphics.setColor(255, 255, 255)
+    rgb(1,87,155)
+    love.graphics.circle("fill", love.graphics.getWidth() + 300, love.graphics.getHeight() / 2, 600)
+
+    rgb(2,119,189)
     love.graphics.circle("line", love.graphics.getWidth() + 300, love.graphics.getHeight() / 2, 600)
 
+    local origin = cpml.vec2.new(love.graphics.getWidth() + 300,  love.graphics.getHeight() / 2)
+
     for i = 1,#self.options do
-        if i == self.selected then
-            love.graphics.setColor(200, 200, 200)
-        else
-            love.graphics.setColor(100, 100, 100)
-        end
         local rot = (-math.pi / 16) * (i - 1) + self.rotation
-        local origin = cpml.vec2.new(love.graphics.getWidth() + 300,  love.graphics.getHeight() / 2)
         local pos = origin + cpml.vec2.new(-590, -16):rotate(rot)
         local text = self.options[i][1]
         if type(text) ~= "string" then
             text = text()
         end
-        love.graphics.printf(text:upper(), pos.x, pos.y, 300, "left", rot)
 
+        local lennn = 600 + ((i == self.selected) and self.extra or 0)
         local rot1 = rot + (math.pi / 32)
         local rot2 = rot + (-math.pi / 32)
-        local rot1pos = origin + cpml.vec2.new(-600, 0):rotate(rot1)
-        local rot2pos = origin + cpml.vec2.new(-600, 0):rotate(rot2)
-        love.graphics.setColor(200, 200, 200)
+        local rot1pos = origin + cpml.vec2.new(-lennn, 0):rotate(rot1)
+        local rot2pos = origin + cpml.vec2.new(-lennn, 0):rotate(rot2)
+
+        rgb(2,119,189)
         love.graphics.line(origin.x, origin.y, rot1pos.x, rot1pos.y)
         love.graphics.line(origin.x, origin.y, rot2pos.x, rot2pos.y)
+
+        rgb(224,224,224)
+
+        if i == self.selected then
+            rgb(255,255,255)
+            love.graphics.arc("fill", origin.x, origin.y, lennn, rot1 + math.pi, rot2 + math.pi)
+
+            rgb(33,33,33)
+        end
+
+        love.graphics.printf(text:upper(), pos.x, pos.y, 300, "left", rot)
     end
 
     love.graphics.push()
     love.graphics.setColor(255, 255, 255)
     love.graphics.translate(0, love.graphics.getHeight() / 2)
-    love.graphics.draw(frogIcon, 32, -32)
+    love.graphics.draw(frogIcon, 32, -48)
     love.graphics.print("kylmäkuljetus", 100, -32)
     love.graphics.pop()
 
@@ -149,6 +164,10 @@ function menu:update(dt)
     end
     if self.rotation < self.targetRotation then
         self.rotation = self.rotation + dt
+    end
+
+    if self.extra < 20 then
+        self.extra = self.extra + dt * 80
     end
 
     self.particles:update(dt)
@@ -164,6 +183,7 @@ end
 function menu:scroll(i)
     self.selected = math.min(#self.options, self.selected - i)
     self.targetRotation = self.targetRotation + (-math.pi / 16) * i
+    self.extra = 0
     love.audio.play(menuScrollSound)
 end
 
@@ -178,6 +198,7 @@ end
 function menu:keyreleased(key)
     if key == "space" or key == "return" then
         love.audio.play(menuChooseSound)
+        self.extra = 0
         self.options[self.selected][2]()
     end
     if key == "escape" then
