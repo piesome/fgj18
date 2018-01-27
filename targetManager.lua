@@ -25,7 +25,7 @@ end
 
 function TargetManager:drawHud(playerPosition)
     local nextPosition = self.targets[1].position
-    local radius = math.min(love.graphics.getWidth(), love.graphics.getHeight()) / 2
+    local radius = math.min(playerPosition:dist(nextPosition), math.min(love.graphics.getWidth(), love.graphics.getHeight()) / 2)
     local targetDirection = (playerPosition - nextPosition):normalize()
     local targetAngle = math.atan2(targetDirection.y, targetDirection.x)
     local origin = cpml.vec2.new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
