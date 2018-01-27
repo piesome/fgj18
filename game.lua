@@ -11,19 +11,27 @@ TargetManager = require "targetManager"
 Projectile = require "projectile"
 
 local game = {}
-local ship = Ship()
-local enemies = {}
+
 local camera = Camera(0, 0)
 camera.smoother = Camera.smooth.none()
 
-local grid = Grid()
-local asteroids = AsteroidField()
-local targets = TargetManager()
-local projectile = Projectile(cpml.vec2(0, 0), ship)
+local level, enemies, grid, asteroids, targets
 
 function game:enter()
-    for i=1, 4 do
-        table.insert(enemies, Enemy(cpml.vec2.new(love.math.random(constants.WIDTH), love.math.random(constants.HEIGHT))))
+    self:loadLevel("level1")
+end
+
+function game:loadLevel(name)
+    level = require(name)
+
+    grid = Grid(level.width, level.height)
+    ship = Ship(cpml.vec2.new(level.ship))
+    asteroids = AsteroidField(level.asteroids)
+    targets = TargetManager(level.targets)
+
+    enemies = {}
+    for _, data in pairs(level.enemies) do
+        table.insert(enemies, Enemy(cpml.vec2.new(data)))
     end
 end
 
@@ -36,8 +44,6 @@ function draw()
     for _, enemy in pairs(enemies) do
         enemy:draw()
     end
-
-    projectile:draw()
 end
 
 function game:lookAtPlayer()
@@ -50,10 +56,8 @@ end
 
 function game:update(dt)
     ship:update(dt)
-    ship.position = cpml.vec2.new(cpml.utils.clamp(ship.position.x, 0, constants.WIDTH), cpml.utils.clamp(ship.position.y, 0, constants.HEIGHT))
+    ship.position = cpml.vec2.new(cpml.utils.clamp(ship.position.x, 0, level.width), cpml.utils.clamp(ship.position.y, 0, level.height))
     targets:checkTargets(ship.position)
-
-    projectile:update(dt)
 
     for _, enemy in pairs(enemies) do
         enemy:update(dt)

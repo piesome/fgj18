@@ -6,14 +6,14 @@ Target = require "target"
 
 TargetManager = Class{}
 
-function TargetManager:init()
+function TargetManager:init(data)
     self.targets = {}
-    self.targetCount = 4
-    self.nextTarget = 0
+    self.targetCount = #data
+    self.nextTarget = 1
     self.done = false
 
-    for i=0, self.targetCount do
-        table.insert(self.targets, Target(i, cpml.vec2.new(love.math.random(constants.WIDTH), love.math.random(constants.HEIGHT))))
+    for i, datum in pairs(data) do
+        table.insert(self.targets, Target(i, cpml.vec2.new(datum)))
     end
 end
 
@@ -29,7 +29,7 @@ function TargetManager:checkTargets(playerPosition)
         if cpml.vec2.dist2(target.position, playerPosition) < 30 then
             if target.number == self.nextTarget then
                 self.nextTarget = self.nextTarget + 1
-                if self.nextTarget > self.targetCount then
+                if self.nextTarget >= self.targetCount then
                     self.done = true
                 end
 
