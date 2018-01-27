@@ -9,6 +9,7 @@ function Target:init(number, position)
     self.number = number
     self.position = position
     self.rotation = 0
+    self.frogRequirement = 20
 end
 
 function Target:update(dt)
