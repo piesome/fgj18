@@ -8,18 +8,18 @@ ParticleEffects = require "particleEffects"
 local missileImage = love.graphics.newImage("assets/graphics/missile.png")
 
 Projectile = Class{
-    init = function(self, position)
+    init = function(self, position, velocity, direction)
         self.position = position
         self.width = 5
         self.length = 15
-        self.direction = vec2(1, 1)
+        self.direction = direction
         self.color = {255, 255, 255, 255}
         self.explosionRadius = 30
 
-        self.velocity = vec2(0, 0)
+        self.velocity = velocity
         self.acceleration = 200
         self.friction = 0.3
-        self.correctionFactor = 0.1
+        self.correctionFactor = 0.5
         self.turnSpeed = 1.5
         self.dead = false
 

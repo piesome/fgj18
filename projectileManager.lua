@@ -15,7 +15,7 @@ ProjectileManager = Class{
     end,
     update = function(self, dt, target, particles)
         if love.keyboard.isDown("0") then
-            table.insert(self.projectiles, Projectile(vec2(0, 0)))
+            self:spawnMissile(vec2(0, 0), vec2(0, 0), vec2(-1, -1))
         end
 
         local aliveProjectiles = {}
@@ -28,6 +28,9 @@ ProjectileManager = Class{
             end
         end
         self.projectiles = aliveProjectiles
+    end,
+    spawnMissile = function(self, position, velocity, direction)
+        table.insert(self.projectiles, Projectile(position, velocity, direction))
     end,
 }
 

@@ -78,7 +78,7 @@ function game:update(dt)
     projectiles:update(dt, ship, particles)
 
     for _, enemy in pairs(enemies) do
-        enemy:update(dt, ship, particles)
+        enemy:update(dt, ship, particles, projectiles)
     end
     self:lookAtPlayer()
 

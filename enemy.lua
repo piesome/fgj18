@@ -12,6 +12,8 @@ Enemy = Class
     , sensorSensitivity = 0.0009 -- heat detection thereshold
     , thrust = 200
     , emitter = ParticleEmitter(vec2(0,0), vec2(0,0), 5, {255, 127, 0, 127}, 0.3, 1, 0.3, 120)
+    , currentCd = 0
+    , cooldown = 5
     }
 
 function Enemy:init(position)
@@ -30,13 +32,19 @@ function cpml.vec2.angle_between2(a, b)
     return math.atan2(cross, dot)
 end
 
-function Enemy:update(dt, ship, particles)
+function Enemy:update(dt, ship, particles, projectiles)
+    self.currentCd = self.currentCd - dt
     toPlayerVec = ship.position - self.position
     playerHeatDetected = ship:radiationAtDistance(toPlayerVec:len())
     --print(playerHeatDetected)
     local acceleration = cpml.vec2.new(0, 0)
     orientationVec = cpml.vec2(0,-1):rotate(self.rotation)
     if playerHeatDetected > self.sensorSensitivity then
+        if self.currentCd <= 0 then
+            projectiles:spawnMissile(self.position, cpml.vec2(0, 1), cpml.vec2(0, -1)) 
+            self.currentCd = self.cooldown
+        end
+
         -- rotate and accelerate to player
         angleToPlayer = cpml.vec2.angle_between2(orientationVec, toPlayerVec)
 
@@ -44,14 +52,14 @@ function Enemy:update(dt, ship, particles)
         if angleToPlayer < math.pi/6 then
             acceleration = cpml.vec2.new(0, -self.thrust):rotate(self.rotation)
             self.velocity = self.velocity + acceleration * dt
-        end
+        end        
     end
     self.angularVelocity = self.angularVelocity - self.angularVelocity * dt
     self.rotation = self.rotation + self.angularVelocity * dt
     self.position = self.position + self.velocity * dt
     self.velocity = self.velocity - (self.velocity * dt * 0.8)
 
-    self.emitter.position = self.position - cpml.vec2.rotate(cpml.vec2(0, -1), self.rotation) * enemyImage:getWidth() / 2
+    self.emitter.position = self.position - cpml.vec2(0, -1):rotate(self.rotation) * enemyImage:getWidth() / 2
     self.emitter.velocity = -acceleration + self.velocity
     if cpml.vec2.len(acceleration) > 0 then
         self.emitter:update(dt, particles)
