@@ -74,7 +74,7 @@ end
 
 function Ship:update(dt, particles)
     self.heatGeneration = 0
-    velocityVector = cpml.vec2.new(0, 0)
+    local velocityVector = cpml.vec2.new(0, 0)
 
     function move(thrust)
         velocityVector = velocityVector - cpml.vec2.new(0, thrust)

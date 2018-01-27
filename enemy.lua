@@ -34,7 +34,7 @@ function Enemy:update(dt, ship, particles)
     toPlayerVec = ship.position - self.position
     playerHeatDetected = ship:radiationAtDistance(toPlayerVec:len())
     --print(playerHeatDetected)
-
+    local acceleration = cpml.vec2.new(0, 0)
     orientationVec = cpml.vec2(0,-1):rotate(self.rotation)
     if playerHeatDetected > self.sensorSensitivity then
         -- rotate and accelerate to player
@@ -52,8 +52,11 @@ function Enemy:update(dt, ship, particles)
     self.velocity = self.velocity - (self.velocity * dt * 0.8)
 
     self.emitter.position = self.position - cpml.vec2.rotate(cpml.vec2(0, -1), self.rotation) * enemyImage:getWidth() / 2
-    self.emitter.velocity = self.velocity + cpml.vec2.rotate(cpml.vec2.normalize(velocityVector), self.rotation):normalize() * -200
-    self.emitter:update(dt, particles)
+    self.emitter.velocity = -acceleration + self.velocity
+    if cpml.vec2.len(acceleration) > 0 then
+        self.emitter:update(dt, particles)
+    end
+    
 end
 
 return Enemy
