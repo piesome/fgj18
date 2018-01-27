@@ -78,7 +78,8 @@ function game:update(dt)
     targets:update(dt)
     local frogRequirement = targets:checkTargets(ship.position)
     if frogRequirement > 0 and ship.frogs >= frogRequirement then
-        ship.frogs = ship.frogs - frogRequirement
+        -- ship.frogs = ship.frogs - frogRequirement
+        for i=1, frogRequirement do ship:loseFrog(particles) end
         targets:goToNextTarget()
     end
     projectiles:update(dt, ship, particles)

@@ -5,7 +5,7 @@ ParticleEmitter = require "particleEmitter"
 
 local shipImage = love.graphics.newImage("assets/graphics/playership.png")
 local frogIcon = love.graphics.newImage("assets/graphics/drugfrog.png")
-
+local deadFrog = love.graphics.newImage("assets/graphics/deadfrog.png")
 
 -- Converts HSL to RGB. (input and output range: 0 - 255)
 function HSL(h, s, l, a)
@@ -36,10 +36,14 @@ Ship = Class
     , shipRadius = 25         -- Used for heat calc and visuals
     , emitter = ParticleEmitter(vec2(0,0), vec2(0,0), 5, {255, 127, 0, 127}, 0.3, 1, 0.3, 120)
     , frogs = 100
+    , frogEmitter = ParticleEmitter(vec2(0,0), vec2(0,0), 0.25, {255, 255, 255, 255}, 2, 1, 0.3, 1)
     }
 
 function Ship:init(position)
     self.position = position
+    self.frogEmitter.image = deadFrog
+    self.frogEmitter.rotationFactor = 3
+    self.frogEmitter.smaller = true
     return self
 end
 
@@ -115,6 +119,18 @@ function Ship:update(dt, particles)
     self.velocity = self.velocity - (self.velocity * dt * 0.1)
 
     self:heatUpdate(dt)
+end
+
+function Ship:loseFrog(particles)
+    if self.frogs <= 0 then
+        return
+    end
+    self.frogs = self.frogs - 1
+    self.frogEmitter.position = self.position
+    self.frogEmitter.velocity = self.velocity + cpml.vec2.new(0, -love.math.random(30, 100)):rotate(love.math.random(math.pi * 2))
+    self.frogEmitter.rotationFactor = love.math.random(-2, 2)
+    self.frogEmitter.rotation = love.math.random(-math.pi, math.pi)
+    self.frogEmitter:update(1, particles)
 end
 
 return Ship

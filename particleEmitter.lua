@@ -13,6 +13,10 @@ ParticleEmitter = Class{
         self.velocityVariation = velocityAngleVariation
         self.counter = 0
         self.speed = speed
+        self.image = nil
+        self.rotation = 0
+        self.rotationFactor = 0
+        self.smaller = false
     end,
     update = function(self, dt, particles)
         self.counter = self.counter + dt
@@ -26,6 +30,10 @@ ParticleEmitter = Class{
             particle.age = 0
             particle.maxAge = self.maxAge
             particle.color = self.color
+            particle.image = self.image
+            particle.rotation = self.rotation
+            particle.rotationFactor = self.rotationFactor
+            particle.smaller = self.smaller
 
             particles:add(particle)
         end
