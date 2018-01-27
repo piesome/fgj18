@@ -35,7 +35,7 @@ function TargetManager:checkTargets(playerPosition)
         if cpml.vec2.dist(target.position, playerPosition) < 70 then
             if target.number == self.nextTarget then
                 self.nextTarget = self.nextTarget + 1
-                if self.nextTarget >= self.targetCount then
+                if self.nextTarget > self.targetCount then
                     self.done = true
                 end
 

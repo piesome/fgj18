@@ -64,6 +64,15 @@ function game:update(dt)
         enemy:update(dt)
     end
     self:lookAtPlayer()
+
+    if targets.done then
+        if level.nextLevel == nil then
+            menu = require "menu"
+            gamestate.switch(menu)
+            return
+        end
+        self:loadLevel(level.nextLevel)
+    end
 end
 
 function game:keyreleased(key)
