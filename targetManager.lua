@@ -23,6 +23,25 @@ function TargetManager:draw()
     end
 end
 
+function TargetManager:drawHud(playerPosition)
+    local nextPosition = self.targets[1].position
+    local radius = math.min(love.graphics.getWidth(), love.graphics.getHeight()) / 2
+    local targetDirection = (playerPosition - nextPosition):normalize()
+    local targetAngle = math.atan2(targetDirection.y, targetDirection.x)
+    local origin = cpml.vec2.new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
+    local size = 13
+
+    local point1 = origin + cpml.vec2.new(0, radius):rotate(targetAngle + (math.pi / 2))
+    local point2 = origin + cpml.vec2.new(size/3, radius - size):rotate(targetAngle + (math.pi / 2))
+    local point3 = origin + cpml.vec2.new(-size/3, radius - size):rotate(targetAngle + (math.pi / 2))
+
+    love.graphics.setColor(0, 0, 0, 255)
+    love.graphics.polygon("line", point1.x, point1.y, point2.x, point2.y, point3.x, point3.y)
+
+    love.graphics.setColor(0, 255, 0, 255)
+    love.graphics.polygon("fill", point1.x, point1.y, point2.x, point2.y, point3.x, point3.y)
+end
+
 function TargetManager:update(dt)
     for _, target in pairs(self.targets) do
         target:update(dt)
