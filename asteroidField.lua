@@ -48,10 +48,12 @@ AsteroidField = Class{
                 table.insert(vertexData, pair.pos.x)
                 table.insert(vertexData, pair.pos.y)
             end
-            love.graphics.push()
-            love.graphics.translate(0, 0)
-            love.graphics.polygon("line", vertexData)    
-            love.graphics.pop()
+            if #vertexData > 6 then
+                love.graphics.push()
+                love.graphics.translate(0, 0)
+                love.graphics.polygon("line", vertexData)    
+                love.graphics.pop()
+            end
         end
     end,
 }
