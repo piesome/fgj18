@@ -22,7 +22,7 @@ end
 Ship = Class
     { position = cpml.vec2.new(100, 100)
     , velocity = cpml.vec2.new(0, 0)
-    , rotation = 0
+    , rotation = math.pi
     , heatGeneration = 0      -- Current heat increase per second
     --, heatStored = 0        -- heat stored inside the ship
     , surfaceHeat = 100       -- heat stored on the surface
