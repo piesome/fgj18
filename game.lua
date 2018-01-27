@@ -78,11 +78,10 @@ function game:update(dt)
     ship:update(dt, particles)
     ship.position = cpml.vec2.new(cpml.utils.clamp(ship.position.x, 0, level.width), cpml.utils.clamp(ship.position.y, 0, level.height))
     targets:update(dt)
-    local frogRequirement = targets:checkTargets(ship.position)
-    if frogRequirement > 0 and ship.frogs >= frogRequirement then
-        -- ship.frogs = ship.frogs - frogRequirement
-        for i=1, frogRequirement do ship:loseFrog(particles) end
-        targets:goToNextTarget()
+    local ret = targets:checkTargets(ship.position)
+    if ret ~= nil and ship.frogs >= ret[2] then
+        for i=1, ret[2] do ship:loseFrog(particles) end
+        targets:removeTarget(ret[1])
     end
     projectiles:update(dt, ship, particles)
 
