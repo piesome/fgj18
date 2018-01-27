@@ -53,15 +53,20 @@ function TargetManager:checkTargets(playerPosition)
         target = self.targets[i]
         if cpml.vec2.dist(target.position, playerPosition) < 70 then
             if target.number == self.nextTarget then
-                self.nextTarget = self.nextTarget + 1
-                if self.nextTarget > self.targetCount then
-                    self.done = true
-                end
-
-                table.remove(self.targets, i)
+                return target.frogRequirement
             end
         end
     end
+    return 0
+end
+
+function TargetManager:goToNextTarget()
+    self.nextTarget = self.nextTarget + 1
+    if self.nextTarget > self.targetCount then
+        self.done = true
+    end
+
+    table.remove(self.targets, 1)
 end
 
 return TargetManager

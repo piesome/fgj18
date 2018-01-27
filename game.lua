@@ -68,6 +68,7 @@ function game:draw()
     starmap:draw(ship.position)
     camera:draw(draw)
     targets:drawHud(ship.position)
+    ship:drawHud()
 end
 
 function game:update(dt)
@@ -75,7 +76,12 @@ function game:update(dt)
     ship:update(dt, particles)
     ship.position = cpml.vec2.new(cpml.utils.clamp(ship.position.x, 0, level.width), cpml.utils.clamp(ship.position.y, 0, level.height))
     targets:update(dt)
-    targets:checkTargets(ship.position)
+    local frogRequirement = targets:checkTargets(ship.position)
+    if frogRequirement > 0 and ship.frogs >= frogRequirement then
+        -- ship.frogs = ship.frogs - frogRequirement
+        for i=1, frogRequirement do ship:loseFrog(particles) end
+        targets:goToNextTarget()
+    end
     projectiles:update(dt, ship, particles)
 
     for _, enemy in pairs(enemies) do

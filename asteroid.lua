@@ -1,6 +1,7 @@
 Class = require "hump.class"
 cpml = require "cpml"
 vec2 = cpml.vec2
+require "rayCasting"
 
 Asteroid = Class{
     init = function(self, position, radius)
@@ -36,12 +37,6 @@ Asteroid = Class{
     end,
 }
 
--- returns positive if c is on the left side of line a b, else negative
-function orient2D(a, b, c)
-    d = a - c
-    e = b - c
-    return d.x * e.y - d.y * e.x
-end
 
 -- Andrew's algorithm
 function convexHull(points)
