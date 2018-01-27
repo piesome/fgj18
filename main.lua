@@ -1,5 +1,5 @@
 gamestate = require "hump.gamestate"
-splashscreen = require "splashscreen"
+splashScreen = require "splashScreen"
 menu = require "menu"
 
 function love.keypressed(key)
@@ -25,7 +25,8 @@ function love.load()
         minwidth = 720,
         minheight = 480
     })
-    
+
     gamestate.registerEvents()
-    gamestate.switch(menu)
+    gamestate.push(menu)
+    gamestate.push(splashScreen)
 end

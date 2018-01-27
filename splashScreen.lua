@@ -1,25 +1,19 @@
 gamestate = require "hump.gamestate"
 
-menu = require "menu"
+local splashScreen = {}
 
-local splashscreen = {}
+splashScreen.entrytime = nil
+splashScreen.image = love.graphics.newImage("assets/piesome.png")
 
-splashscreen.entrytime = nil
-splashscreen.image = love.graphics.newImage("assets/piesome.png")
-splashscreen.timeout = 3
-splashscreen.brightness = 0
-splashscreen.fadeOutTime = 0.2
-splashscreen.fadeInTime = 0.2
-
-local function enter()
-    gamestate.switch(menu)
-end
-
-function splashscreen:enter()
+function splashScreen:enter()
     self.entrytime = love.timer.getTime()
+    self.timeout = 3
+    self.brightness = 0
+    self.fadeOutTime = 0.2
+    self.fadeInTime = 0.2
 end
 
-function splashscreen:draw()
+function splashScreen:draw()
     love.graphics.push()
 
     love.graphics.scale(love.graphics.getWidth() / self.image:getWidth(), love.graphics.getHeight() / self.image:getHeight())
@@ -29,10 +23,10 @@ function splashscreen:draw()
     love.graphics.pop()
 end
 
-function splashscreen:update(dt)
+function splashScreen:update(dt)
     if love.timer.getTime() >= self.entrytime + self.timeout then
         if self.brightness <= 0 then
-            enter()
+            gamestate.pop()
         else
             self.brightness = self.brightness - dt * 255/self.fadeOutTime
         end
@@ -43,8 +37,8 @@ function splashscreen:update(dt)
     end
 end
 
-function splashscreen:keyreleased(key)
+function splashScreen:keyreleased(key)
     self.timeout = 0
 end
 
-return splashscreen
+return splashScreen
