@@ -1,7 +1,7 @@
 Class = require "hump.class"
 cpml = require "cpml"
 
-local targetImage = love.graphics.newImage("assets/graphics/waypoint.png")
+local targetImage = love.graphics.newImage("assets/graphics/drugfrog.png")
 
 Target = Class{}
 
