@@ -27,6 +27,7 @@ Ship = Class
     { position = cpml.vec2.new(100, 100)
     , velocity = cpml.vec2.new(0, 0)
     , rotation = math.pi
+    , rotationSpeed = 0
     , heatGeneration = 0      -- Current heat increase per second
     --, heatStored = 0        -- heat stored inside the ship
     , surfaceHeat = 100       -- heat stored on the surface
@@ -37,6 +38,8 @@ Ship = Class
     , emitter = ParticleEmitter(vec2(0,0), vec2(0,0), 5, {255, 127, 0, 127}, 0.3, 1, 0.3, 120)
     , frogs = 100
     , frogEmitter = ParticleEmitter(vec2(0,0), vec2(0,0), 0.25, {255, 255, 255, 255}, 2, 1, 0.3, 1)
+    , turnSpeed = 0.04
+    , accelSpeed = 1.5
     }
 
 function Ship:init(position)
@@ -99,21 +102,24 @@ function Ship:update(dt, particles)
     end
 
     function rotate(rad)
-        self.rotation = self.rotation + rad
+        self.rotationSpeed = self.rotationSpeed + rad
     end
 
     if love.keyboard.isDown("left") then
-        rotate(-1 * dt)
+        rotate(-self.turnSpeed * dt)
     end
     if love.keyboard.isDown("right") then
-        rotate(1 * dt)
+        rotate(self.turnSpeed * dt)
     end
     if love.keyboard.isDown("up") then
-        move(1 * dt)
+        move(self.accelSpeed * dt)
     end
     if love.keyboard.isDown("down") then
-        move(-1 * dt)
+        move(-self.accelSpeed * dt)
     end
+
+    self.rotation = self.rotation + self.rotationSpeed
+
     self.velocity = self.velocity + cpml.vec2.rotate(cpml.vec2.normalize(velocityVector), self.rotation)
     self.position = self.position + self.velocity * dt
     self.velocity = self.velocity - (self.velocity * dt * 0.1)
