@@ -31,13 +31,26 @@ function Ship:init()
     return self
 end
 
+function Ship:heatCircle(heatPercentage, radius)
+    brightness = math.max(0.0, math.min(1.0, heatPercentage))*255
+    love.graphics.setColor(HSL(0, 255, brightness, brightness))
+    love.graphics.circle("fill", self.position.x, self.position.y, radius)
+end
+
 function Ship:draw()
+
+    for x=1,50 do
+        r = 15 + x*x/4
+        self:heatCircle(self:radiationAtDistance(r)*2, r)
+    end
     love.graphics.setColor(HSL(0, 255, math.min(self.surfaceHeat*0.1, 255)))
-    love.graphics.print("@", self.position.x, self.position.y)
+    love.graphics.print("@", self.position.x-17, self.position.y-20) -- XXX: manual centering
+
+    love.graphics.setColor(100,100,100)
 end
 
 function Ship:radiationAtDistance(d)
-    return self.heatRadiationOutput / (d*d)  -- exponential fall: 1 / r^2
+    return self.heatRadiationOutput / (d*d)  -- exponential falloff: 1 / r^2
 end
 
 function Ship:heatUpdate(dt)
