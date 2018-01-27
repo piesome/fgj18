@@ -1,7 +1,7 @@
 return {
     name = "Level 1",
-    width = 2048,
-    height = 2048,
+    width = 2050,
+    height = 2050,
     ship = {300, 300},
     asteroids = {
         {300, 250, 40},

@@ -42,6 +42,10 @@ function Ship:heatCircle(heatPercentage, radius)
     love.graphics.circle("fill", self.position.x, self.position.y, radius)
 end
 
+function Ship:center()
+    return self.position - cpml.vec2.new(shipImage:getWidth(), shipImage:getHeight())
+end
+
 function Ship:draw()
     for x=1,50 do
         r = 15 + x*x/4
