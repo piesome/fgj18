@@ -22,6 +22,7 @@ Projectile = Class{
         self.correctionFactor = 0.5
         self.turnSpeed = 1.5
         self.dead = false
+        self.timeToLive = 10
 
         self.emitter = ParticleEmitter(self.position, self.direction, 5, {255, 127, 0, 127}, 0.1, 1, 0.3, 60)
     end,
@@ -44,6 +45,12 @@ Projectile = Class{
         if self.dead then
             return
         end
+
+        if self.timeToLive <= 0 then
+            self:die(particles)
+        end
+
+        self.timeToLive = self.timeToLive - dt
 
         local targetDirection = ((target - self.position):normalize() - self.velocity:normalize() * 0.5):normalize()
         local targetAngle = math.atan2(targetDirection.y, targetDirection.x)
@@ -75,9 +82,12 @@ Projectile = Class{
         self.emitter:update(dt, particles)
 
         if (target - self.position):len() <= self.explosionRadius then
-            self.dead = true
-            ParticleEffects:explosion(particles, self.position, self.velocity)
+            self:die(particles)
         end
+    end,
+    die = function(self, particles)
+        self.dead = true
+        ParticleEffects:explosion(particles, self.position, self.velocity)
     end,
 }
 
