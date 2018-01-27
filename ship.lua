@@ -80,7 +80,7 @@ function Ship:radiationAtDistance(d)
     return self.heatRadiationOutput / (d*d)  -- exponential falloff: 1 / r^2
 end
 
-function Ship:heatUpdate(dt)
+function Ship:heatUpdate(dt, particles)
     self.surfaceHeat = self.surfaceHeat + self.heatGeneration
 
     self.heatRadiationOutput = math.pow(self.surfaceHeat,2) * self.emissivity
@@ -88,7 +88,7 @@ function Ship:heatUpdate(dt)
     self.surfaceHeat = self.surfaceHeat - heatTransmission
 
     if self.surfaceHeat > self.frogsDieAtTemperature and love.math.random() < self.frogDeathProbability then
-        self.frogs = math.max(self.frogs - 1, 0)
+        self:loseFrog(particles)
     end
 
     -- print(self.surfaceHeat, self.heatRadiationOutput)
@@ -137,7 +137,7 @@ function Ship:update(dt, particles)
     self.position = self.position + self.velocity * dt
     self.velocity = self.velocity - (self.velocity * dt * 0.1)
 
-    self:heatUpdate(dt)
+    self:heatUpdate(dt, particles)
 end
 
 function Ship:loseFrog(particles)
