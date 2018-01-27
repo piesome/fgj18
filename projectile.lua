@@ -18,7 +18,7 @@ Projectile = Class{
         self.acceleration = 200
         self.friction = 0.3
         self.correctionFactor = 0.1
-        self.turnSpeed = 3
+        self.turnSpeed = 1.5
 
         self.emitter = ParticleEmitter(self.position, self.direction, 5, {255, 127, 0, 127}, 0.1, vec2(50, 50), 60)
     end,
@@ -60,7 +60,7 @@ Projectile = Class{
         self.position = self.position + self.velocity * dt
         
         self.emitter.position = self.position - self.direction * self.length
-        self.emitter.velocity = self.direction * -1 * self.acceleration
+        self.emitter.velocity = self.direction * -1 * self.acceleration + self.velocity
         self.emitter:update(dt, particles)
     end,
 }

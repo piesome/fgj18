@@ -81,7 +81,7 @@ function Ship:update(dt, particles)
         self.heatGeneration = self.heatGeneration + self.thrusterHeat * dt
 
         self.emitter.position = self.position - cpml.vec2.rotate(cpml.vec2(0, -1), self.rotation) * shipImage:getWidth() / 2
-        self.emitter.velocity = cpml.vec2.rotate(cpml.vec2.normalize(velocityVector), self.rotation):normalize() * -200
+        self.emitter.velocity = self.velocity + cpml.vec2.rotate(cpml.vec2.normalize(velocityVector), self.rotation):normalize() * -200
         self.emitter:update(dt, particles)
     end
 
