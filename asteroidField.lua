@@ -3,6 +3,7 @@ cpml = require "cpml"
 vec2 = cpml.vec2
 
 Asteroid = require "asteroid"
+RayCasting = require "rayCasting"
 
 AsteroidField = Class{
     init = function(self, data)
@@ -20,10 +21,11 @@ AsteroidField = Class{
         for _, asteroid in ipairs(self.asteroids) do
             local vertices = {}
             for _, point in ipairs(asteroid.pointVectors) do
-                local direction = point - position
-                if direction:dot(point - asteroid.position) <= 0 then
-                    table.insert(vertices, point)
-                    table.insert(vertices, direction:normalize() * 200 + point)
+                local direction = (point - position) * 2
+                local result = RayCasting.test2DRayPolygons(position, direction, {asteroid.pointVectors})
+                if result then
+                    table.insert(vertices, result[2])
+                    --table.insert(vertices, result[2] + direction)
                 end
             end
             local center = vec2()
@@ -40,7 +42,7 @@ AsteroidField = Class{
                 pair.pos = vertex
                 table.insert(verticesWithAngles, pair)
             end
-            table.sort(verticesWithAngles, function(vertA, vertB) return vertA.angle > vertB.angle end)
+            --table.sort(verticesWithAngles, function(vertA, vertB) return vertA.angle > vertB.angle end)
             local vertexData = {}
             for _, pair in ipairs(verticesWithAngles) do
                 table.insert(vertexData, pair.pos.x)

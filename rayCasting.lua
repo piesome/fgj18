@@ -12,7 +12,7 @@ end
 function test2DRayPolygons(origin, dir, polygons)
     local segA = origin
     local minResult = {10000, nil} -- max tracing distance
-    local segB = origin + dir * minResult[0]
+    local segB = origin + dir * minResult[1]
 
     for j, poly in next, polygons do
         for i=2,#poly do
@@ -21,13 +21,13 @@ function test2DRayPolygons(origin, dir, polygons)
 
             result = test2DSegmentSegment(segA,segB,segC,segD)
             if result ~= nil then
-                if result[0] < minResult[0] then
+                if result[1] < minResult[1] then
                     minResult = result
                 end
             end
         end
     end
-    if minResult[1] ~= nil then
+    if minResult[2] ~= nil then
         return minResult
     else
         return nil
@@ -66,4 +66,6 @@ function test2DSegmentSegment(a,b,c,d)
     return nil
 end
 
-
+return 
+    { test2DRayPolygons = test2DRayPolygons
+    }
