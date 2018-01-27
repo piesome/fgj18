@@ -73,10 +73,30 @@ function game:draw()
     ship:drawHud()
 end
 
+function game:clampShip(dt)
+    local border = 100
+    function force(x, y)
+        ship.velocity = ship.velocity + cpml.vec2.new(x, y) * dt
+    end
+
+    if ship.position.x < border then
+        force(border - ship.position.x, 0)
+    end
+    if ship.position.y < border then
+        force(0, border - ship.position.y)
+    end
+    if ship.position.x > level.width - border then
+        force((level.width - border) - ship.position.x, 0)
+    end
+    if ship.position.y > level.height - border then
+        force(0, (level.height - border) - ship.position.y)
+    end
+end
+
 function game:update(dt)
     particles:update(dt)
     ship:update(dt, particles)
-    ship.position = cpml.vec2.new(cpml.utils.clamp(ship.position.x, 0, level.width), cpml.utils.clamp(ship.position.y, 0, level.height))
+    self:clampShip(dt)
     targets:update(dt)
     local ret = targets:checkTargets(ship.position)
     if ret ~= nil and ship.frogs >= ret[2] then
