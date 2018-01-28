@@ -59,19 +59,17 @@ Projectile = Class{
         local currentAngle = math.atan2(self.direction.y, self.direction.x)
 
         local rotationDirection = 0
-        if math.abs(math.fmod(targetAngle-currentAngle, math.pi*2)) < self.maxTurnAngle then
-            if targetAngle < currentAngle then
-                if math.abs(targetAngle-currentAngle) < math.pi then
-                    rotationDirection = -1
-                else
-                    rotationDirection = 1
-                end
+        if targetAngle < currentAngle then
+            if math.abs(targetAngle-currentAngle) < math.pi then
+                rotationDirection = -1
             else
-                if math.abs(targetAngle-currentAngle) < math.pi then
-                    rotationDirection = 1
-                else
-                    rotationDirection = -1
-                end
+                rotationDirection = 1
+            end
+        else
+            if math.abs(targetAngle-currentAngle) < math.pi then
+                rotationDirection = 1
+            else
+                rotationDirection = -1
             end
         end
 

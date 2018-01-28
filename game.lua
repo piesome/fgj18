@@ -134,7 +134,11 @@ function game:update(dt)
     self:clampShip(dt)
     targets:update(dt)
     local ret = targets:checkTargets(ship.position)
-    if ret ~= nil and ship.frogs >= ret[2] then
+    if ret ~= nil then
+        if ship.frogs < ret[2] then
+            self:over("meh")
+            return
+        end
         for i=1, ret[2] do ship:loseFrog(particles) end
         targets:removeTarget(ret[1])
     end
