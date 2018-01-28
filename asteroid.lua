@@ -72,8 +72,11 @@ Asteroid = Class{
                 return 0, 0, 0, 0
             end
 
-            local value = ((love.math.noise(xx + x / 32, yy + y / 32) * (love.math.noise(xx + x / 18, yy + y / 18)) * 2) - 1) * 0.15
-            return HSL(32 / 360 * 255, 0.15 * 255, math.floor(((0.3 + value) * 16) + 0.5) * 16, 255)
+            local n1 = love.math.noise(xx + x / 32, yy + y / 32)
+            local n2 = love.math.noise(xx + x / 18, yy + y / 18)
+
+            local lvalue = ((n1 * n2 * 2) - 1) * 0.15
+            return HSL(((xx * yy * radius) * 255) % 255, 0.05 * 255, math.floor(((0.3 + lvalue) * 16) + 0.5) * 16, 255)
         end
 
         local id = canvas:newImageData()
