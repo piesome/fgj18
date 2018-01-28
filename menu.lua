@@ -86,12 +86,12 @@ function menu:enter()
     local particles = self.particles
     local frogEmitter = self.frogEmitter
 
-    function suprise()
+    function surprise()
         self.raining = not self.raining
     end
 
     self.options = {
-        {"suprise", suprise},
+        {"surprise", surprise},
         {audioLabel, audio},
         {videoLabel, fullscreen},
         {"play", play},
