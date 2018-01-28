@@ -96,9 +96,26 @@ function game:drawWarnings()
     for i, warn in pairs(self.warnings) do
         love.graphics.setFont(fonts.small)
         local red = 160 + ((i * 30 + (self.warnLoop * 160)) % 95)
-        love.graphics.setColor(red, 0, 0, 255)
+        --love.graphics.setColor(red, 0, 0, 255)
+        love.graphics.setColor(255, 255, 255, 255)
         local width = 400
-        love.graphics.printf(warn.msg, (love.graphics.getWidth() / 2) - (width / 2), 24 + (32 * (i - 1)), width, "center")
+        local texts = {
+            {255, 255, 255, 255},
+            "/",
+            {red, 0, 0, 255},
+            "!",
+            {255, 255, 255, 255},
+            "\\ ",
+            {red, 0, 0, 255},
+            warn.msg,
+            {255, 255, 255, 255},
+            " /",
+            {red, 0, 0, 255},
+            "!",
+            {255, 255, 255, 255},
+            "\\"
+        }
+        love.graphics.printf(texts, (love.graphics.getWidth() / 2) - (width / 2), 24 + (32 * (i - 1)), width, "center")
     end
 end
 
