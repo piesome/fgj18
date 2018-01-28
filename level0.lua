@@ -12,6 +12,7 @@ return {
         {900, 600}
     },
     texts = {
-        {900, 500, "come here ;)"}
+        {100, 300, "move with arrow keys"},
+        {900, 500, "deliver frogs here"}
     }
 }
