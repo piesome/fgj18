@@ -23,7 +23,7 @@ $(LOVE_FILE):
 
 $(ZIP_TO_UPLOAD): $(LOVE_FILE) .build .build/license.txt
 	rm -f $(ZIP_TO_UPLOAD)
-	zip -r upload.zip .build
+	cd .build && zip -r ../$(ZIP_TO_UPLOAD) *
 
 .phony: clean
 clean:
