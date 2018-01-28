@@ -24,6 +24,8 @@ function test2DRayPolygons(origin, dir, polygons, exitOnFirstHit)
                     if exitOnFirstHit then
                         return result
                     else
+                        result[3] = segD - segC -- normal
+                        result[4] = i           -- i th polygon
                         minResult = result
                     end
                 end
