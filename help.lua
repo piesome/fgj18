@@ -1,44 +1,62 @@
 gamestate = require "hump.gamestate"
 
+require "util"
+Bubble = require "bubble"
+
 local help = {}
 
-help.entrytime = nil
-help.image = love.graphics.newImage("assets/piesome.png")
-
 function help:enter()
-    self.entrytime = love.timer.getTime()
-    self.timeout = 90
-    self.brightness = 0
-    self.fadeOutTime = 0.2
-    self.fadeInTime = 0.2
+    self.bubbles = {}
+    self.bubbleTimer = 0.5
 end
 
+function help:leave()
+
+end
+
+local bgscale = gradient {
+    direction = "horizontal";
+    {144, 202, 249};
+    {66, 165, 245}
+}
+
 function help:draw()
-    love.graphics.push()
+    love.graphics.setColor(144, 202, 249)
+    love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
-    love.graphics.scale(love.graphics.getWidth() / self.image:getWidth(), love.graphics.getHeight() / self.image:getHeight())
-    love.graphics.setColor(self.brightness, self.brightness, self.brightness)
-    love.graphics.draw(self.image)
+    drawinrect(bgscale, 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
-    love.graphics.pop()
+    for _, bubble in pairs(self.bubbles) do
+        bubble:draw()
+    end
+
+    love.graphics.setColor(255, 255, 255)
+    local text = [[
+You're an intergalactic frog shipper with a cooling problem. Deliver 20 frogs to each indicated frog-station while dodging the enemy ships and their frog killing missiles. Keep your engines cool as frogs don't enjoy boiling to death.
+
+Control your ship with the arrow keys. Press space to continue.
+    ]]
+    love.graphics.printf(text, 30, 30, love.graphics.getWidth() - 60)
 end
 
 function help:update(dt)
-    if love.timer.getTime() >= self.entrytime + self.timeout then
-        if self.brightness <= 0 then
-            gamestate.pop()
-        else
-            self.brightness = self.brightness - dt * 255/self.fadeOutTime
-        end
-    else
-        if self.brightness < 255 then
-            self.brightness = self.brightness + dt * 255/self.fadeInTime
+    self.bubbleTimer = self.bubbleTimer - dt
+    if self.bubbleTimer <= 0 then
+        table.insert(self.bubbles, Bubble())
+        self.bubbleTimer = 0.5
+    end
+
+    for i=#self.bubbles, 1, -1 do
+        if self.bubbles[i]:update(dt) then
+            table.remove(self.bubbles, i)
         end
     end
 end
 
 function help:keyreleased(key)
-    self.timeout = 0
+    if key == "space" then
+        gamestate.pop()
+    end
 end
 
 return help
