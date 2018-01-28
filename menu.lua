@@ -33,6 +33,7 @@ function splash()
 end
 
 function help()
+    music:stop()
     gamestate.push(helpScreen)
 end
 
