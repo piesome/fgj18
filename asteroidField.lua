@@ -10,10 +10,25 @@ AsteroidField = Class{
         self.asteroids = {}
 
         for i=0,level.asteroids do
-            x = love.math.random(0, level.width)
-            y = love.math.random(0, level.height)
-            size = love.math.random(40, 150)
-            table.insert(self.asteroids, Asteroid(vec2.new(x, y), size))
+            local x = love.math.random(0, level.width)
+            local y = love.math.random(0, level.height)
+            local size = love.math.random(40, 150)
+            local size2 = size*size
+            local pos = vec2.new(x, y)
+            local vecs = {}
+
+            for _,v in ipairs(level.targets) do table.insert(vecs, vec2.new(v[1], v[2])) end
+            for _,v in ipairs(level.enemies) do table.insert(vecs, vec2.new(v[1], v[2])) end
+            table.insert(vecs, vec2.new(level.ship[1], level.ship[2]))
+
+            for _,v in ipairs(vecs) do
+                local delta = pos:sub(v)
+                if delta:len2() < size2 + 10000 then
+                    goto cont
+                end
+            end
+            table.insert(self.asteroids, Asteroid(pos, size))
+            ::cont::
         end
     end,
     draw = function(self)
