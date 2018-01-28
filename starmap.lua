@@ -3,8 +3,8 @@ Class = require "hump.class"
 local Starmap = Class{}
 
 function Starmap:init(width, height)
-    self.width = width
-    self.height = height
+    self.width = math.max(width, love.graphics.getWidth() + 200)
+    self.height = math.max(height, love.graphics.getHeight() + 200)
     self.canvases = {}
     for i=1, 10 do
         table.insert(self.canvases, self:level())
