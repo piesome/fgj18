@@ -5,9 +5,10 @@ Bubble = require "bubble"
 
 local help = {}
 
-function help:enter()
+function help:enter(_, next)
     self.bubbles = {}
     self.bubbleTimer = 0.5
+    self.next = next
 end
 
 function help:leave()
@@ -55,7 +56,11 @@ end
 
 function help:keyreleased(key)
     if key == "space" then
-        gamestate.pop()
+        if self.next ~= nil then
+            gamestate.switch(self.next)
+        else
+            gamestate.pop()
+        end
     end
 end
 

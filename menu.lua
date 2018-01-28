@@ -8,6 +8,7 @@ game = require "game"
 ParticleManager = require "particleManager"
 ParticleEmitter = require "particleEmitter"
 Bubble = require "bubble"
+helpScreen = require "help"
 
 local music = love.audio.newSource("assets/music/untitled.ogg", "stream")
 local frogIcon = love.graphics.newImage("assets/graphics/drugfrog.png")
@@ -19,7 +20,7 @@ local menuChooseSound = love.audio.newSource("assets/sfx/menu_choose.wav", "stat
 local menu = {}
 
 function play()
-    gamestate.switch(game)
+    gamestate.push(helpScreen, game)
 end
 
 function exit()
@@ -32,7 +33,6 @@ function splash()
 end
 
 function help()
-    helpScreen = require "help"
     gamestate.push(helpScreen)
 end
 
