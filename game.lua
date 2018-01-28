@@ -65,10 +65,10 @@ end
 
 function draw()
     grid:draw()
+    asteroids:draw()
     heatRenderer:draw(ship)
     ship:draw()
     targets:draw()
-    asteroids:draw()
     projectiles:draw()
     particles:draw()
 

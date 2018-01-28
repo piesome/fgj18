@@ -32,6 +32,7 @@ AsteroidField = Class{
         end
     end,
     draw = function(self)
+        love.graphics.setColor(255, 255, 255)
         for _, asteroid in ipairs(self.asteroids) do
             asteroid:draw()
         end
@@ -46,7 +47,7 @@ AsteroidField = Class{
                 end
                 local result = RayCasting.test2DRayPolygons(position, direction, {asteroid.pointVectors})
                 if result then
-                    table.insert(vertices, result[2])
+                    table.insert(vertices, result[2] + direction:normalize() * 20)
                     table.insert(vertices, result[2] + direction:normalize() * 1000)
                 end
             end
