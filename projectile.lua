@@ -78,12 +78,12 @@ Projectile = Class{
         local velocityMult = (1 - self.friction * dt)
         self.velocity = self.velocity * (1 - self.friction * dt) + self.direction * dt * self.acceleration
 
-        local castResult = asteroids:testRay(self.position, self.velocity:normalize() * 50, true)
+        local castResult = asteroids:testRay(self.position, self.velocity * dt, false)
         if castResult then
             self:die(particles, target)
-        else
-            self.position = self.position + self.velocity * dt
         end
+
+        self.position = self.position + self.velocity * dt
 
         self.emitter.position = self.position - self.direction * self.length
         self.emitter.velocity = self.direction * -1 * self.acceleration + self.velocity
