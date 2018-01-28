@@ -4,6 +4,7 @@ return {
     width = 3000,
     height = 3000,
     ship = {750, 850},
+    frogs = 100,
     asteroids = 100,
     enemies = {
         {640, 1200},

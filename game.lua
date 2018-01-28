@@ -46,7 +46,7 @@ function game:loadLevel(name)
 
     grid = Grid(level.width, level.height)
     starmap = Starmap(level.width, level.height)
-    ship = Ship(cpml.vec2.new(level.ship))
+    ship = Ship(cpml.vec2.new(level.ship), level.frogs)
     asteroids = AsteroidField(level)
     targets = TargetManager(level.targets)
     projectiles = ProjectileManager()

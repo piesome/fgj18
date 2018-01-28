@@ -29,11 +29,12 @@ Ship = Class
     , accelSpeed = 1.5
     }
 
-function Ship:init(position)
+function Ship:init(position, frogs)
     self.position = position
     self.frogEmitter.image = deadFrog
     self.frogEmitter.rotationFactor = 3
     self.frogEmitter.smaller = true
+    self.frogs = frogs
     return self
 end
 
