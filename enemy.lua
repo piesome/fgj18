@@ -32,16 +32,20 @@ function cpml.vec2.angle_between2(a, b)
     return math.atan2(cross, dot)
 end
 
-function Enemy:update(dt, ship, particles, projectiles)
+function Enemy:update(dt, ship, particles, projectiles, asteroidField)
     self.currentCd = self.currentCd - dt
-    toPlayerVec = ship.position - self.position
+    local toPlayerVec = ship.position - self.position
+
+
     playerHeatDetected = ship:radiationAtDistance(toPlayerVec:len())
     --print(playerHeatDetected)
     local acceleration = cpml.vec2.new(0, 0)
     orientationVec = cpml.vec2(0,-1):rotate(self.rotation)
-    if playerHeatDetected > self.sensorSensitivity then
+    if playerHeatDetected > self.sensorSensitivity and
+            asteroidField:testRay(self.position, toPlayerVec, true) == nil then -- testRay is slower than radiation test
+
         if self.currentCd <= 0 then
-            projectiles:spawnMissile(self.position, self.velocity, vec2(1, 0):rotate(self.rotation)) 
+            projectiles:spawnMissile(self.position, self.velocity, vec2(1, 0):rotate(self.rotation))
             self.currentCd = self.cooldown
         end
 
@@ -52,7 +56,7 @@ function Enemy:update(dt, ship, particles, projectiles)
         if angleToPlayer < math.pi/6 then
             acceleration = cpml.vec2.new(0, -self.thrust):rotate(self.rotation)
             self.velocity = self.velocity + acceleration * dt
-        end        
+        end
     end
     self.angularVelocity = self.angularVelocity - self.angularVelocity * dt
     self.rotation = self.rotation + self.angularVelocity * dt
@@ -64,7 +68,7 @@ function Enemy:update(dt, ship, particles, projectiles)
     if cpml.vec2.len(acceleration) > 0 then
         self.emitter:update(dt, particles)
     end
-    
+
 end
 
 return Enemy

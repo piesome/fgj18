@@ -59,6 +59,13 @@ AsteroidField = Class{
             end
         end
     end,
+    testRay = function(self, origin, dir, exitOnFirstHit)
+        polys = {}
+        for _, a in next, self.asteroids do
+            table.insert(polys, a.convexHullVectors)
+        end
+        return test2DRayPolygons(origin, dir, polys, exitOnFirstHit)
+    end
 }
 
 return AsteroidField

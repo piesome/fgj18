@@ -10,8 +10,8 @@ function orient2D(a, b, c)
 end
 
 
-function test2DRayPolygons(origin, dir, polygons)
-    local minResult = {100000, nil} -- max tracing distance
+function test2DRayPolygons(origin, dir, polygons, exitOnFirstHit)
+    local minResult = {dir:len(), nil} -- max tracing distance
 
     for j, poly in next, polygons do
         segC = poly[#poly]
@@ -21,7 +21,11 @@ function test2DRayPolygons(origin, dir, polygons)
             result = test2DRaySegment(origin, dir, segC, segD)
             if result ~= nil then
                 if result[1] < minResult[1] then
-                    minResult = result
+                    if exitOnFirstHit then
+                        return result
+                    else
+                        minResult = result
+                    end
                 end
             end
             segC = segD
@@ -113,11 +117,11 @@ function test2DRaySegment(origin, dir, a, b)
         else
             return nil
         end
-    else 
+    else
         return nil
     end
 end
 
-return 
+return
     { test2DRayPolygons = test2DRayPolygons
     }
