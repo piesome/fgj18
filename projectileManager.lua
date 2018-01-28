@@ -22,6 +22,7 @@ ProjectileManager = Class{
 
         for index, projectile in ipairs(self.projectiles) do
             if projectile:update(dt, target.position, particles) then
+                WARN("exploding frogs")
                 for i=1,5 do target:loseFrog(particles) end
             end
             if projectile.dead then

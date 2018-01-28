@@ -61,6 +61,7 @@ function Ship:heatUpdate(dt, particles)
     self.surfaceHeat = self.surfaceHeat - heatTransmission
 
     if self.surfaceHeat > self.frogsDieAtTemperature and love.math.random() < self.frogDeathProbability then
+        WARN("heath death")
         self:loseFrog(particles)
     end
 

@@ -2,6 +2,7 @@ gamestate = require "hump.gamestate"
 Camera = require "hump.camera"
 cpml = require "cpml"
 
+fonts = require "fonts"
 constants = require "constants"
 Grid = require "grid"
 Ship = require "ship"
@@ -29,6 +30,8 @@ function game:enter()
     self.playing = true
     self.deathTimeout = 3
     self.gameOverType = "lose"
+    self.warnings = {}
+    self.warnLoop = 0
     self:loadLevel("level1")
     music:setLooping(true)
     music:play()
@@ -82,9 +85,35 @@ function game:draw()
 
     starmap:draw(ship.position)
     camera:draw(draw)
+
+    self:drawWarnings()
+
     targets:drawHud(ship.position)
     ship:drawHud()
 end
+
+function game:drawWarnings()
+    for i, warn in pairs(self.warnings) do
+        love.graphics.setFont(fonts.small)
+        local red = 160 + ((i * 30 + (self.warnLoop * 160)) % 95)
+        love.graphics.setColor(red, 0, 0, 255)
+        local width = 400
+        love.graphics.printf(warn.msg, (love.graphics.getWidth() / 2) - (width / 2), 24 + (32 * (i - 1)), width, "center")
+    end
+end
+
+function game:warn(msg)
+    for i, warn in pairs(self.warnings) do
+        if warn.msg == msg then
+            warn.iat = love.timer.getTime()
+            return
+        end
+    end
+
+    table.insert(self.warnings, {msg=msg, iat=love.timer.getTime()})
+end
+
+WARN = function (msg) game:warn(msg) end
 
 function game:clampShip(dt)
     local border = 100
@@ -114,6 +143,8 @@ end
 function game:update(dt)
     particles:update(dt)
 
+    self.warnLoop = (self.warnLoop + dt) % 0.6
+
     if not self.playing then
         self.deathTimeout = self.deathTimeout - dt
 
@@ -128,6 +159,13 @@ function game:update(dt)
         end
 
         return
+    end
+
+    for i=#self.warnings, 1, -1 do
+        local warn = self.warnings[i]
+        if warn.iat + 4 < love.timer.getTime() then
+            table.remove(self.warnings, i)
+        end
     end
 
     ship:update(dt, particles)

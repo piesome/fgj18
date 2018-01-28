@@ -45,6 +45,7 @@ function Enemy:update(dt, ship, particles, projectiles, asteroidField)
             asteroidField:testRay(self.position, toPlayerVec, true) == nil then -- testRay is slower than radiation test
 
         if self.currentCd <= 0 then
+            WARN("missile fired")
             projectiles:spawnMissile(self.position, self.velocity, vec2(1, 0):rotate(self.rotation))
             self.currentCd = self.cooldown
         end
