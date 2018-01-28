@@ -44,6 +44,7 @@ function game:loadLevel(name)
     self.gameOverType = "lose"
     self.warnings = {}
     self.warnLoop = 0
+    self.entered = love.timer.getTime()
 
     grid = Grid(level.width, level.height)
     starmap = Starmap(level.width, level.height)
@@ -94,6 +95,12 @@ function game:draw()
     camera:draw(draw)
 
     self:drawWarnings()
+
+    if self.entered + 3 > love.timer.getTime() then
+        love.graphics.setFont(fonts.small)
+        love.graphics.setColor(255, 255, 255, 255 - math.min(255, ((love.timer.getTime() - self.entered) / 3) * 255))
+        love.graphics.printf(level.name, (love.graphics.getWidth() / 2) - 100, (love.graphics.getHeight() / 2) - 64, 200, "center")
+    end
 
     targets:drawHud(ship.position)
     ship:drawHud()
