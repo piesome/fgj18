@@ -25,6 +25,7 @@ Ship = Class
     , emitter = ParticleEmitter(vec2(0,0), vec2(0,0), 5, {255, 127, 0, 127}, 0.3, 1, 0.3, 120)
     , frogs = 100
     , frogEmitter = ParticleEmitter(vec2(0,0), vec2(0,0), 0.25, {255, 255, 255, 255}, 2, 1, 0.3, 1)
+    , frogLossSpeed = 120
     , turnSpeed = 0.04
     , accelSpeed = 1.5
     }
@@ -113,6 +114,10 @@ function Ship:update(dt, particles, asteroids)
 
     local castResult = asteroids:testRay(self.position, self.velocity * dt + self.velocity:normalize() * 2, false)
     if castResult then
+        if self.velocity:len() > self.frogLossSpeed then
+            WARN("crushed frogs")
+            self:loseFrog(particles)
+        end
         self.velocity = -self.velocity / 5
         --self.position = self.position - self.velocity * dt
     else
