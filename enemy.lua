@@ -60,9 +60,15 @@ function Enemy:update(dt, ship, particles, projectiles, asteroidField)
         end
     end
     self.angularVelocity = self.angularVelocity - self.angularVelocity * dt
-    self.rotation = self.rotation + self.angularVelocity * dt
-    self.position = self.position + self.velocity * dt
-    self.velocity = self.velocity - (self.velocity * dt * 0.8)
+
+    local castResult = asteroidField:testRay(self.position, self.velocity * dt + self.velocity:normalize() * 2, false)
+    if castResult then
+        self.velocity = -self.velocity / 5
+    else
+        self.rotation = self.rotation + self.angularVelocity * dt
+        self.position = self.position + self.velocity * dt
+        self.velocity = self.velocity - (self.velocity * dt * 0.8)
+    end
 
     self.emitter.position = self.position - cpml.vec2(0, -1):rotate(self.rotation) * enemyImage:getWidth() / 2
     self.emitter.velocity = -acceleration + self.velocity
