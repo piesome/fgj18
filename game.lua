@@ -185,7 +185,7 @@ function game:update(dt)
         end
     end
 
-    ship:update(dt, particles)
+    ship:update(dt, particles, asteroids)
     self:clampShip(dt)
     targets:update(dt)
     local ret = targets:checkTargets(ship.position)

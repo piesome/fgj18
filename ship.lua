@@ -68,7 +68,7 @@ function Ship:heatUpdate(dt, particles)
     -- print(self.surfaceHeat, self.heatRadiationOutput)
 end
 
-function Ship:update(dt, particles)
+function Ship:update(dt, particles, asteroids)
     self.heatGeneration = 0
     local velocityVector = cpml.vec2.new(0, 0)
 
@@ -110,9 +110,15 @@ function Ship:update(dt, particles)
     end
     self.rotation = self.rotation + self.rotationSpeed
 
-    self.velocity = self.velocity + cpml.vec2.rotate(cpml.vec2.normalize(velocityVector), self.rotation)
-    self.position = self.position + self.velocity * dt
-    self.velocity = self.velocity - (self.velocity * dt * 0.1)
+    local castResult = asteroids:testRay(self.position, self.velocity * dt + self.velocity:normalize() * 2, false)
+    if castResult then
+        self.velocity = -self.velocity / 5
+        --self.position = self.position - self.velocity * dt
+    else
+        self.velocity = self.velocity + cpml.vec2.rotate(cpml.vec2.normalize(velocityVector), self.rotation)
+        self.position = self.position + self.velocity * dt
+        self.velocity = self.velocity - (self.velocity * dt * 0.1)
+    end
 
     self:heatUpdate(dt, particles)
 end
