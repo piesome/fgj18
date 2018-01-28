@@ -26,12 +26,7 @@ end
 
 function love.load()
     love.graphics.setFont(fonts.menu)
-    love.window.setMode(720, 480, {
-        resizable = true,
-        centered = true,
-        minwidth = 720,
-        minheight = 480
-    })
+    love.window.setFullscreen(true)
 
     gamestate.registerEvents()
     gamestate.push(menu)
