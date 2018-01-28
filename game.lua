@@ -27,12 +27,7 @@ local level, enemies, grid, asteroids, targets, starmap, projectiles, particles,
 heatRenderer = HeatRenderer()
 
 function game:enter()
-    self.playing = true
-    self.deathTimeout = 3
-    self.gameOverType = "lose"
-    self.warnings = {}
-    self.warnLoop = 0
-    self:loadLevel("level1")
+    self:loadLevel("level0")
     music:setLooping(true)
     music:play()
 end
@@ -43,6 +38,12 @@ end
 
 function game:loadLevel(name)
     level = require(name)
+
+    self.playing = true
+    self.deathTimeout = 3
+    self.gameOverType = "lose"
+    self.warnings = {}
+    self.warnLoop = 0
 
     grid = Grid(level.width, level.height)
     starmap = Starmap(level.width, level.height)
@@ -166,7 +167,7 @@ function game:update(dt)
         self.deathTimeout = self.deathTimeout - dt
 
         if self.deathTimeout < 0 then
-            if type == "win" and level.nextLevel ~= nil then
+            if self.gameOverType == "win" and level.nextLevel ~= nil then
                 self:loadLevel(level.nextLevel)
 
                 return

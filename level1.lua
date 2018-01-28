@@ -1,6 +1,6 @@
 return {
     name = "Level 1",
-    nextLevel = nil,
+    nextLevel = "level2",
     width = 3000,
     height = 3000,
     ship = {750, 850},
