@@ -20,7 +20,7 @@ function heatRenderer:init()
             float radiationP = max(min(heat_radiation_output / (d*d) * 200, 0.5), 0.0);
 
             float c = radiationP;
-            return texcolor * vec4(c,c,c,c) * vec4(1.0, 0.0, 0.0, 1.0);
+            return (vec4(1.0, 1.0, 1.0, 1.0) - texcolor) * vec4(c,c,c,c) * vec4(1.0, 0.0, 0.0, 1.0);
         }
     ]]
     local vertexcode = [[
@@ -41,8 +41,13 @@ function heatRenderer:preDraw(asteroids, ship)
 
     love.graphics.push()
     love.graphics.setCanvas(self.canvas)
-    love.graphics.clear(255, 255, 255, 255)
-    asteroids:drawShadowMap(ship.position)
+    love.graphics.clear(0, 0, 0, 0)
+    local a = 255 / (3 * 3)
+    for x=-1, 1, 1 do
+        for y=-1, 1, 1 do
+            asteroids:drawShadowMap(ship.position - vec2(30 * x, 30 * y), a)
+        end
+    end
     love.graphics.setCanvas()
     love.graphics.pop()
 end

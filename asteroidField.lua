@@ -37,7 +37,7 @@ AsteroidField = Class{
             asteroid:draw()
         end
     end,
-    drawShadowMap = function(self, position)
+    drawShadowMap = function(self, position, a)
         for _, asteroid in ipairs(self.asteroids) do
             local vertices = {}
             for _, point in ipairs(asteroid.pointVectors) do
@@ -73,11 +73,11 @@ AsteroidField = Class{
             end
             if #vertexData > 6 then
                 love.graphics.push()
-                love.graphics.setBlendMode("replace")
+                --love.graphics.setBlendMode("replace")
                 love.graphics.translate(0, 0)
-                love.graphics.setColor(0,0,0,0)
+                love.graphics.setColor(a, a, a, a)
                 love.graphics.polygon("fill", vertexData)
-                love.graphics.setBlendMode("alpha")
+                --love.graphics.setBlendMode("alpha")
                 love.graphics.pop()
             end
         end
