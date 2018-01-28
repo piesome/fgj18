@@ -1,11 +1,16 @@
 gamestate = require "hump.gamestate"
 
+require "util"
+Bubble = require "bubble"
+
 local music = love.audio.newSource("assets/music/gameover.ogg", "stream")
 
 local gameOver = {}
 
 function gameOver:enter(_, endStyle)
     self.endStyle = endStyle
+    self.bubbles = {}
+    self.bubbleTimer = 0.5
     music:setLooping(false)
     music:play()
 
@@ -31,10 +36,39 @@ function gameOver:leave()
     music:stop()
 end
 
+local bgscale = gradient {
+    direction = "horizontal";
+    {239, 154, 154};
+    {239, 83, 80}
+}
+
 function gameOver:draw()
+    love.graphics.setColor(239, 154, 154)
+    love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+
+    drawinrect(bgscale, 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+
+    for _, bubble in pairs(self.bubbles) do
+        bubble:draw()
+    end
+
     love.graphics.setColor(255, 255, 255)
     love.graphics.print("Game over!", 100, 100)
     love.graphics.printf(self.text:gsub("\n", " "), 100, 200, love.graphics.getWidth() - 200)
+end
+
+function gameOver:update(dt)
+    self.bubbleTimer = self.bubbleTimer - dt
+    if self.bubbleTimer <= 0 then
+        table.insert(self.bubbles, Bubble())
+        self.bubbleTimer = 0.5
+    end
+
+    for i=#self.bubbles, 1, -1 do
+        if self.bubbles[i]:update(dt) then
+            table.remove(self.bubbles, i)
+        end
+    end
 end
 
 function gameOver:keyreleased()
