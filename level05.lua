@@ -13,6 +13,7 @@ return {
         {600, 900}
     },
     texts = {
+        {650, 100, "Keep your heat low!"},
         {500, 250, "Watch out for enemies!"}
     }
 }

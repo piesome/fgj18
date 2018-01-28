@@ -13,6 +13,6 @@ return {
     },
     texts = {
         {100, 300, "move with arrow keys"},
-        {900, 500, "deliver frogs here"}
+        {900, 500, "smugle frogs here"}
     }
 }
