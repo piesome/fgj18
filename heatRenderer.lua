@@ -42,12 +42,12 @@ function heatRenderer:preDraw(asteroids, ship)
     love.graphics.push()
     love.graphics.setCanvas(self.canvas)
     love.graphics.clear(0, 0, 0, 0)
-    local a = 255 / (3 * 3)
-    for x=-1, 1, 1 do
-        for y=-1, 1, 1 do
-            asteroids:drawShadowMap(ship.position - vec2(30 * x, 30 * y), a)
-        end
-    end
+    local a = 255 --/ (3 * 3)
+    --for x=-1, 1, 1 do
+        --for y=-1, 1, 1 do
+            asteroids:drawShadowMap(ship.position, a)
+        --end
+    --end
     love.graphics.setCanvas()
     love.graphics.pop()
 end
