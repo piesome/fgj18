@@ -20,6 +20,7 @@ local menuChooseSound = love.audio.newSource("assets/sfx/menu_choose.wav", "stat
 local menu = {}
 
 function play()
+    music:stop()
     gamestate.push(helpScreen, game)
 end
 
@@ -33,7 +34,6 @@ function splash()
 end
 
 function help()
-    music:stop()
     gamestate.push(helpScreen)
 end
 
