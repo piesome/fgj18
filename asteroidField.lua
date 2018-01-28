@@ -6,10 +6,14 @@ Asteroid = require "asteroid"
 RayCasting = require "rayCasting"
 
 AsteroidField = Class{
-    init = function(self, data)
+    init = function(self, level)
         self.asteroids = {}
-        for _, datum in pairs(data) do
-            table.insert(self.asteroids, Asteroid(vec2.new(datum[1], datum[2]), datum[3]))
+
+        for i=0,level.asteroids do
+            x = love.math.random(0, level.width)
+            y = love.math.random(0, level.height)
+            size = love.math.random(40, 150)
+            table.insert(self.asteroids, Asteroid(vec2.new(x, y), size))
         end
     end,
     draw = function(self)

@@ -3,12 +3,8 @@ return {
     nextLevel = nil,
     width = 3000,
     height = 3000,
-    ship = {800, 800},
-    asteroids = {
-        {800, 750, 40},
-        {1000, 850, 100},
-        {550, 1200, 50}
-    },
+    ship = {750, 850},
+    asteroids = 100,
     enemies = {
         {640, 1200},
         {2400, 550},
