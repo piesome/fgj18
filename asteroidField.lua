@@ -40,7 +40,10 @@ AsteroidField = Class{
         for _, asteroid in ipairs(self.asteroids) do
             local vertices = {}
             for _, point in ipairs(asteroid.pointVectors) do
-                local direction = (point - position)*2
+                local direction = (point - position)*1.001
+                if direction:len() > love.graphics.getWidth() then
+                    break
+                end
                 local result = RayCasting.test2DRayPolygons(position, direction, {asteroid.pointVectors})
                 if result then
                     table.insert(vertices, result[2])
