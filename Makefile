@@ -18,7 +18,10 @@ $(LOVE_FILE):
 	mkdir -p .build/release
 	git ls-files | egrep -v ".*\.ase|.*\.xrns" | xargs zip -9 -r $(LOVE_FILE)
 
-$(ZIP_TO_UPLOAD): $(LOVE_FILE) .build
+.build/license.txt: license.txt
+	cp $< $@
+
+$(ZIP_TO_UPLOAD): $(LOVE_FILE) .build .build/license.txt
 	rm -f $(ZIP_TO_UPLOAD)
 	zip -r upload.zip .build
 
