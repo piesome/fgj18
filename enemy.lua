@@ -14,6 +14,7 @@ Enemy = Class
     , emitter = ParticleEmitter(vec2(0,0), vec2(0,0), 5, {255, 127, 0, 127}, 0.3, 1, 0.3, 120)
     , currentCd = 0
     , cooldown = 5
+    , test = nil
     }
 
 function Enemy:init(position)
@@ -24,6 +25,9 @@ end
 function Enemy:draw()
     love.graphics.setColor(255, 255, 255)
     love.graphics.draw(enemyImage, self.position.x, self.position.y, self.rotation, 1, 1, enemyImage:getWidth() / 2, enemyImage:getHeight() / 2)
+    if self.test ~= nil then
+        love.graphics.line(self.position.x, self.position.y, self.test[2].x, self.test[2].y)
+    end
 end
 
 function cpml.vec2.angle_between2(a, b)
@@ -41,6 +45,12 @@ function Enemy:update(dt, ship, particles, projectiles, asteroidField)
     --print(playerHeatDetected)
     local acceleration = cpml.vec2.new(0, 0)
     orientationVec = cpml.vec2(0,-1):rotate(self.rotation)
+    local test = asteroidField:testRay(self.position, toPlayerVec, true)
+    if test ~= nil then
+        self.test = test
+    else
+        self.test = nil
+    end
     if playerHeatDetected > self.sensorSensitivity and
             asteroidField:testRay(self.position, toPlayerVec, true) == nil then -- testRay is slower than radiation test
 

@@ -11,7 +11,7 @@ end
 
 
 function test2DRayPolygons(origin, dir, polygons, exitOnFirstHit)
-    local minResult = {dir:len(), nil} -- max tracing distance
+    local minResult = {1.0, nil} -- max tracing distance
 
     for j, poly in next, polygons do
         segC = poly[#poly]
@@ -104,6 +104,7 @@ function test2DSegmentSegment(a,b,c,d)
     return nil
 end
 
+-- https://rootllama.wordpress.com/2014/06/20/ray-line-segment-intersection-test-in-2d/
 function test2DRaySegment(origin, dir, a, b)
     local v1 = origin - a
     local v2 = b - a
