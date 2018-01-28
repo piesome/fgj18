@@ -16,5 +16,8 @@ return {
         {2500, 500},
         {2500, 2500},
         {500, 2500}
+    },
+    texts = {
+        {400, 850, "Enemies will detect you from your heat transmission."},
     }
 }
