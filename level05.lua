@@ -5,7 +5,7 @@ return {
     height = 1000,
     ship = {500, 100},
     asteroids = 5,
-    frogs = 25,
+    frogs = 50,
     enemies = {
         {500, 500}
     },
