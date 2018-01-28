@@ -197,7 +197,7 @@ function game:update(dt)
         for i=1, ret[2] do ship:loseFrog(particles) end
         targets:removeTarget(ret[1])
     end
-    projectiles:update(dt, ship, particles)
+    projectiles:update(dt, ship, particles, asteroids)
 
     for _, enemy in pairs(enemies) do
         enemy:update(dt, ship, particles, projectiles, asteroids)

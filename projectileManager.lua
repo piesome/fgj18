@@ -13,15 +13,15 @@ ProjectileManager = Class{
             projectile:draw()
         end
     end,
-    update = function(self, dt, target, particles)
+    update = function(self, dt, target, particles, asteroids)
         if love.keyboard.isDown("0") then
-            self:spawnMissile(vec2(0, 0), vec2(0, 0), vec2(-1, -1))
+            self:spawnMissile(vec2(0, 0), vec2(0, 0), vec2(1, 1))
         end
 
         local aliveProjectiles = {}
 
         for index, projectile in ipairs(self.projectiles) do
-            if projectile:update(dt, target.position, particles) then
+            if projectile:update(dt, target.position, particles, asteroids) then
                 WARN("exploding frogs")
                 for i=1,5 do target:loseFrog(particles) end
             end

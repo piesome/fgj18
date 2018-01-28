@@ -43,7 +43,7 @@ Projectile = Class{
 
         love.graphics.pop()
     end,
-    update = function(self, dt, target, particles)
+    update = function(self, dt, target, particles, asteroids)
         if self.dead then
             return
         end
@@ -77,7 +77,13 @@ Projectile = Class{
         self.direction = vec2(math.cos(nextAngle), math.sin(nextAngle))
         local velocityMult = (1 - self.friction * dt)
         self.velocity = self.velocity * (1 - self.friction * dt) + self.direction * dt * self.acceleration
-        self.position = self.position + self.velocity * dt
+
+        local castResult = asteroids:testRay(self.position, self.velocity:normalize() * 50, true)
+        if castResult then
+            self:die(particles, target)
+        else
+            self.position = self.position + self.velocity * dt
+        end
 
         self.emitter.position = self.position - self.direction * self.length
         self.emitter.velocity = self.direction * -1 * self.acceleration + self.velocity

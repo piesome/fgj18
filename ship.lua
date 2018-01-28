@@ -97,6 +97,9 @@ function Ship:update(dt, particles)
     if love.keyboard.isDown("down") then
         move(-self.accelSpeed * dt)
     end
+    if love.keyboard.isDown("9") then
+        self.velocity = vec2.zero
+    end
 
     if self.rotationSpeed > 0.1 then
         self.rotationSpeed = 0.075
