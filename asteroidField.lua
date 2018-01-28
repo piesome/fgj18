@@ -64,10 +64,15 @@ AsteroidField = Class{
         end
     end,
     testRay = function(self, origin, dir, exitOnFirstHit)
-        polys = {}
+        local polys = {}
+        local boundingCircles = {}
         for _, a in next, self.asteroids do
-            table.insert(polys, a.convexHullVectors)
+            -- Bounding check
+            if testRaySphere(origin, dir, a.position, a.boundingRadius) then
+                table.insert(polys, a.convexHullVectors)
+            end
         end
+
         return test2DRayPolygons(origin, dir, polys, exitOnFirstHit)
     end
 }

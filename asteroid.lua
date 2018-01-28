@@ -24,10 +24,14 @@ Asteroid = Class{
                 self.edges[i] = p
             end
         end
+        self.boundingRadius = 0 -- larger than optimally tight bounding sphere
+
         each = ((math.pi * 2) / self.segmentCount)
         for i=1, self.segmentCount do
             rad = (each * i)
-            pos = vec2.rotate(vec2.new(0, radius + love.math.random(-radius / 4, radius / 4)), rad)
+            local randomRadius = radius + love.math.random(-radius / 4, radius / 4)
+            self.boundingRadius = math.max(self.boundingRadius, randomRadius)
+            pos = vec2.rotate(vec2.new(0,randomRadius), rad)
             point = self.position + pos
             table.insert(self.points, point.x)
             table.insert(self.points, point.y)
@@ -38,8 +42,10 @@ Asteroid = Class{
             emax(3, point.x)
             emax(4, point.y)
         end
+
         self.convexHullVectors = convexHull(self.pointVectors)
         self.convexHull = {}
+
         for i, vec in next, self.convexHullVectors do
             table.insert(self.convexHull, vec.x)
             table.insert(self.convexHull, vec.y)

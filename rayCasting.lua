@@ -122,6 +122,23 @@ function test2DRaySegment(origin, dir, a, b)
     end
 end
 
+-- Test if ray r = p + td intersects sphere with center c and radius r
+-- returns boolean
+function testRaySphere(p, d, c, r)
+    m = p - c;
+    c = vec2.dot(m, m) - r * r
+    -- If there is definitely at least one real root, there must be an intersection
+    if c <= 0.0 then return true end
+    b = vec2.dot(m, d)
+    -- Early exit if ray origin outside sphere and ray pointing away from sphere
+    if b > 0.0 then return false end
+    disc = b*b - c
+    -- A negative discriminant corresponds to ray missing sphere
+    if disc < 0.0 then return false end
+    -- Now ray must hit sphere
+    return true
+end
+
 return
     { test2DRayPolygons = test2DRayPolygons
     }
