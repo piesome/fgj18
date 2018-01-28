@@ -1,4 +1,5 @@
 gamestate = require "hump.gamestate"
+Class = require "hump.class"
 cpml = require "cpml"
 
 require "util"
@@ -80,6 +81,8 @@ function menu:enter()
     self.raining = false
     self.extra = 0
     self.extraTarget = 0
+    self.bubbles = {}
+    self.bubbleTimer = 0.5
     local particles = self.particles
     local frogEmitter = self.frogEmitter
 
@@ -108,25 +111,49 @@ function menu:leave()
     music:stop()
 end
 
-local rgb = love.graphics.setColor
+local Bubble = Class{
+    init = function(self)
+        self.size = love.math.random(20, 50)
+        self.opacity = love.math.random(5, 25)
+        self.position = cpml.vec2.new(love.math.random(-25, love.graphics.getWidth() + 25), love.graphics.getHeight() + self.size)
+        self.speed = love.math.random(30, 75)
+    end,
+    draw = function(self)
+        love.graphics.setColor(0, 0, 0, self.opacity)
+        love.graphics.circle("fill", self.position.x, self.position.y, self.size / 2)
+    end,
+    update = function(self, dt)
+        self.position = self.position - cpml.vec2.new(0, dt * self.speed)
+        if self.position.y < -self.size then
+            return true
+        end
 
+        return false
+    end
+}
+
+local rgb = love.graphics.setColor
 
 local bgscale = gradient {
     direction = "horizontal";
-    {165,214,167};
-    {102,187,106};
+    {165, 214, 167};
+    {102, 187, 106};
 }
 
 function menu:draw()
-    rgb(165,214,167)
+    rgb(165, 214, 167)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
     drawinrect(bgscale, 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
-    rgb(56,142,60)
+    for _, bubble in pairs(self.bubbles) do
+        bubble:draw()
+    end
+
+    rgb(56, 142, 60, 100)
     love.graphics.circle("fill", love.graphics.getWidth() + 300, love.graphics.getHeight() / 2, 600)
 
-    rgb(67,160,71)
+    rgb(67, 160, 71, 100)
     love.graphics.circle("line", love.graphics.getWidth() + 300, love.graphics.getHeight() / 2, 600)
 
     local origin = cpml.vec2.new(love.graphics.getWidth() + 300,  love.graphics.getHeight() / 2)
@@ -134,10 +161,6 @@ function menu:draw()
     for i = 1,#self.options do
         local rot = (-math.pi / 16) * (i - 1) + self.rotation
         local pos = origin + cpml.vec2.new(-590, -16):rotate(rot)
-        local text = self.options[i][1]
-        if type(text) ~= "string" then
-            text = text()
-        end
 
         local lennn = 600 + ((i == self.selected) and self.extra or 0)
         local rot1 = rot + (math.pi / 32)
@@ -145,20 +168,24 @@ function menu:draw()
         local rot1pos = origin + cpml.vec2.new(-lennn, 0):rotate(rot1)
         local rot2pos = origin + cpml.vec2.new(-lennn, 0):rotate(rot2)
 
-        rgb(67,160,71)
+        rgb(67, 160, 71, 100)
         love.graphics.line(origin.x, origin.y, rot1pos.x, rot1pos.y)
         love.graphics.line(origin.x, origin.y, rot2pos.x, rot2pos.y)
 
-        rgb(224,224,224)
+        rgb(224, 224, 224)
 
         if i == self.selected then
-            rgb(255,255,255)
+            rgb(255, 255, 255)
             love.graphics.arc("fill", origin.x, origin.y, lennn, rot1 + math.pi, rot2 + math.pi)
 
-            rgb(33,33,33)
+            rgb(33, 33, 33)
         end
 
-        love.graphics.printf(text:upper(), pos.x, pos.y, 300, "left", rot)
+        local text = self.options[i][1]
+        if type(text) ~= "string" then
+            text = text()
+        end
+        love.graphics.printf(text:lower(), pos.x, pos.y, 300, "left", rot)
     end
 
     love.graphics.push()
@@ -172,6 +199,18 @@ function menu:draw()
 end
 
 function menu:update(dt)
+    self.bubbleTimer = self.bubbleTimer - dt
+    if self.bubbleTimer <= 0 then
+        table.insert(self.bubbles, Bubble())
+        self.bubbleTimer = 0.5
+    end
+
+    for i=#self.bubbles, 1, -1 do
+        if self.bubbles[i]:update(dt) then
+            table.remove(self.bubbles, i)
+        end
+    end
+
     if self.rotation > self.targetRotation then
         self.rotation = self.rotation - dt
     end
