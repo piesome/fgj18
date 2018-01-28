@@ -48,7 +48,7 @@ function heatRenderer:preDraw(asteroids, ship)
 end
 
 function heatRenderer:draw(ship)
-    local radius = ship.shipRadius + 10 + 50*50/5.5
+    local radius = math.max(love.graphics.getWidth(), love.graphics.getHeight())
 
     love.graphics.setShader(self.shader)
     self.shader:send("shadows", self.canvas)
