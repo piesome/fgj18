@@ -72,6 +72,12 @@ function draw()
     projectiles:draw()
     particles:draw()
 
+    for _, text in pairs(level.texts or {}) do
+        love.graphics.setFont(fonts.small)
+        love.graphics.setColor(255, 255, 255, 255)
+        love.graphics.printf(text[3], text[1] - 100, text[2], 200, "center")
+    end
+
     for _, enemy in pairs(enemies) do
         enemy:draw()
     end

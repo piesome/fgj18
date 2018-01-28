@@ -10,5 +10,8 @@ return {
     },
     targets = {
         {900, 600}
+    },
+    texts = {
+        {900, 500, "come here ;)"}
     }
 }
